@@ -130,6 +130,8 @@ const doshaIcons = {
 // official logo artwork (public/hitayu-logo.png), background removed.
 // Reused at hero scale and at report-header scale.
 function peepalEmblem() {
+  // return `<img src="/test 2.png" alt="Hitayu peepal tree emblem" />`;
+
   return `<img src="/hitayu-logo.png" alt="Hitayu peepal tree emblem" />`;
 }
 
@@ -311,23 +313,35 @@ const figureShape = `
   <rect x="34" y="68" width="10" height="46" rx="5"/>
 `;
 
-function renderConstitutionFigure(key, pct, count) {
-  const clipId = `figure-clip-${key}`;
-  const fillHeight = (pct / 100) * 120;
-  const fillY = 120 - fillHeight;
+// One body, three zones — legs (Vata), belly (Pitta), chest (Kapha) —
+// each fills upward within its own band as that dosha's count rises.
+const figureZoneBands = {
+  kapha: { top: 4, bottom: 45 },
+  pitta: { top: 45, bottom: 68 },
+  vata: { top: 68, bottom: 114 }
+};
+
+function renderCombinedFigure(totals) {
+  const clipId = 'figure-clip-combined';
+  const zoneRect = (key) => {
+    const band = figureZoneBands[key];
+    const pct = Math.round((totals[key] / totalQuestions) * 100);
+    const bandHeight = band.bottom - band.top;
+    const fillHeight = (pct / 100) * bandHeight;
+    const y = band.bottom - fillHeight;
+    return `<rect class="figure__zone figure__zone--${key}" x="0" y="${y}" width="64" height="${fillHeight}" clip-path="url(#${clipId})"></rect>`;
+  };
   return `
-    <div class="figure figure--${key}">
-      <div class="figure__body">
+    <div class="figure figure--combined">
+      <div class="figure__body figure__body--large">
         <svg viewBox="0 0 64 120" class="figure__svg" aria-hidden="true">
           <defs>
             <clipPath id="${clipId}">${figureShape}</clipPath>
           </defs>
           <g class="figure__outline">${figureShape}</g>
-          <rect class="figure__fill" x="0" y="${fillY}" width="64" height="${fillHeight}" clip-path="url(#${clipId})"></rect>
+          ${doshaKeys.map(zoneRect).join('')}
         </svg>
       </div>
-      <span class="figure__count">${count}</span>
-      <span class="figure__label">${doshas[key].name}</span>
     </div>
   `;
 }
@@ -338,12 +352,17 @@ function renderScorePanel() {
   return `
     <aside class="score-panel" id="score-panel" aria-live="polite">
       <p class="score-panel__title">Your Constitution, So Far</p>
-      <div class="score-panel__figures">
+      ${renderCombinedFigure(totals)}
+      <div class="score-panel__legend">
         ${doshaKeys
-          .map((k) => {
-            const pct = Math.round((totals[k] / totalQuestions) * 100);
-            return renderConstitutionFigure(k, pct, totals[k]);
-          })
+          .map(
+            (k) => `
+          <div class="legend-item legend-item--${k}">
+            <span class="legend-item__swatch" aria-hidden="true"></span>
+            <span class="legend-item__label">${doshas[k].name}</span>
+            <span class="legend-item__count">${totals[k]}</span>
+          </div>`
+          )
           .join('')}
       </div>
       <p class="score-panel__progress">${answered} / ${totalQuestions} answered</p>
@@ -468,6 +487,7 @@ function renderFooter() {
     <footer class="site-footer">
       <p class="site-footer__name">Hitayu — Ayurvedic Clinic &amp; Wellness Center</p>
       <p class="site-footer__line">Rooted in tradition. Grown for your wellbeing.</p>
+      <p class="site-footer__copyright">&copy; 2026 Hitayu Ayurvedic Clinic &amp; Wellness Center. All rights reserved.</p>
     </footer>
   `;
 }

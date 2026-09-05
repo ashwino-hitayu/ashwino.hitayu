@@ -55,6 +55,19 @@
      below, unlike --ivory-warm which doubles as a card background. */
   --on-forest: #fbf3df;
 
+  /* -------- Selected-answer tile colours --------
+     Deliberately separate from --vata/--pitta/--kapha above: those feed
+     the medallions, report bars and row labels too, and only the selected
+     tile + the score-panel body should use this exact trio. */
+  --vata-selected: #b2ebf2;
+  --vata-selected-deep: #7fb8c4;
+  --pitta-selected: #ffcc80;
+  --pitta-selected-deep: #e0a050;
+  --kapha-selected: #a5d6a7;
+  --kapha-selected-deep: #6fae72;
+  /* shared dark ink for text/marks on these light pastel fills */
+  --selected-ink: #22201a;
+
   --radius-tile: 8px;
   --shadow-soft: 0 10px 26px rgba(20, 14, 4, 0.14);
   --shadow-card: 0 6px 18px rgba(20, 14, 4, 0.1);
@@ -622,20 +635,13 @@ body {
   text-align: center;
 }
 
-.score-panel__figures {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 18px;
-}
+.figure { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
 
-.figure { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
-
-.figure__body {
-  position: relative;
+.figure__body--large {
   width: 100%;
-  max-width: 58px;
-  height: 96px;
+  max-width: 108px;
+  height: 178px;
+  margin: 0 auto;
 }
 
 .figure__svg { width: 100%; height: 100%; display: block; overflow: visible; }
@@ -644,27 +650,36 @@ body {
   fill: rgba(250, 246, 234, 0.05);
   stroke: var(--gold);
   stroke-width: 2;
-  opacity: 0.7;
+  opacity: 0.8;
 }
-.figure--vata .figure__outline { stroke: var(--vata); }
-.figure--pitta .figure__outline { stroke: var(--pitta); }
-.figure--kapha .figure__outline { stroke: var(--kapha-deep); }
 
-.figure__fill { transition: height 0.4s ease, y 0.4s ease; }
-.figure--vata .figure__fill { fill: var(--vata); }
-.figure--pitta .figure__fill { fill: var(--pitta); }
-.figure--kapha .figure__fill { fill: var(--kapha); }
+.figure__zone { transition: height 0.4s ease, y 0.4s ease; }
+.figure__zone--vata { fill: var(--vata-selected); }
+.figure__zone--pitta { fill: var(--pitta-selected); }
+.figure__zone--kapha { fill: var(--kapha-selected); }
 
-.figure__count {
+.score-panel__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.legend-item { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.legend-item__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(250, 246, 234, 0.4);
+}
+.legend-item--vata .legend-item__swatch { background: var(--vata-selected); }
+.legend-item--pitta .legend-item__swatch { background: var(--pitta-selected); }
+.legend-item--kapha .legend-item__swatch { background: var(--kapha-selected); }
+.legend-item__label { font-size: 11.5px; letter-spacing: 0.03em; color: rgba(250, 246, 234, 0.75); }
+.legend-item__count {
   font-family: 'Marcellus', serif;
   color: var(--on-forest);
   font-size: 15px;
 }
-
-.figure__label { font-size: 11.5px; letter-spacing: 0.03em; color: rgba(250, 246, 234, 0.75); }
-.figure--vata .figure__label { color: #8fbbdc; }
-.figure--pitta .figure__label { color: #eb9468; }
-.figure--kapha .figure__label { color: #ffffff; }
 
 .score-panel__progress {
   text-align: center;
@@ -863,29 +878,37 @@ body {
 .option--selected { border-width: 1.5px; box-shadow: var(--shadow-carved); }
 
 .option--vata.option--selected {
-  background: var(--vata);
-  border-color: var(--vata-deep);
-  color: #fff;
+  background: var(--vata-selected);
+  border-color: var(--vata-selected-deep);
+  color: var(--selected-ink);
 }
-.option--vata.option--selected .option__mark { color: #fff; border-color: rgba(255,255,255,0.65); }
+.option--vata.option--selected .option__mark {
+  background: var(--selected-ink);
+  color: var(--vata-selected);
+  border-color: var(--selected-ink);
+}
 
 .option--pitta.option--selected {
-  background: var(--pitta);
-  border-color: var(--pitta-deep);
-  color: #fff;
+  background: var(--pitta-selected);
+  border-color: var(--pitta-selected-deep);
+  color: var(--selected-ink);
 }
-.option--pitta.option--selected .option__mark { color: #fff; border-color: rgba(255,255,255,0.65); }
+.option--pitta.option--selected .option__mark {
+  background: var(--selected-ink);
+  color: var(--pitta-selected);
+  border-color: var(--selected-ink);
+}
 
 .option--kapha.option--selected {
-  background: var(--kapha);
-  color: var(--ink);
-  border: 2px solid var(--kapha-ink);
+  background: var(--kapha-selected);
+  color: var(--selected-ink);
+  border: 2px solid var(--kapha-selected-deep);
   box-shadow: var(--shadow-carved), 0 0 0 3px rgba(44, 74, 55, 0.08);
 }
 .option--kapha.option--selected .option__mark {
-  background: var(--kapha-ink);
-  color: var(--kapha);
-  border-color: var(--kapha-ink);
+  background: var(--selected-ink);
+  color: var(--kapha-selected);
+  border-color: var(--selected-ink);
 }
 
 /* ==================== Result ==================== */
@@ -966,6 +989,11 @@ body {
   font-size: 12.5px;
   font-style: italic;
   margin: 0;
+}
+.site-footer__copyright {
+  color: var(--ink-faint);
+  font-size: 11px;
+  margin: 14px 0 0;
 }
 
 /* ==================== About page ==================== */
