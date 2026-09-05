@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --yes playwright screenshot --help)",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Bash(npm run *)",
+      "Bash(disown)",
+      "Bash(timeout 30 bash -c 'until curl -sf http://localhost:5183 >/dev/null; do sleep 1; done')"
+    ]
+  }
+}
