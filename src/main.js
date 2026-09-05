@@ -7,11 +7,46 @@ const randomShlokaKey = shlokaKeys[Math.floor(Math.random() * shlokaKeys.length)
 
 const STORAGE_KEY = 'hitayu-dosha-answers';
 const PROFILE_KEY = 'hitayu-dosha-profile';
+const THEME_KEY = 'hitayu-dosha-theme';
 const PAGES = ['home', 'about', 'products'];
 
 function getPageFromHash() {
   const h = (location.hash || '').replace('#', '');
   return PAGES.includes(h) ? h : 'home';
+}
+
+function loadTheme() {
+  try {
+    const raw = localStorage.getItem(THEME_KEY);
+    return raw === 'light' || raw === 'dark' ? raw : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    if (theme) localStorage.setItem(THEME_KEY, theme);
+    else localStorage.removeItem(THEME_KEY);
+  } catch {
+    /* ignore storage errors */
+  }
+}
+
+// null = follow the system's light/dark preference (see index.html's
+// pre-paint script and the @media rules in style.css); an explicit value
+// here overrides that via the [data-theme] attribute.
+function applyTheme() {
+  if (state.theme) {
+    document.documentElement.setAttribute('data-theme', state.theme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+function effectiveTheme() {
+  if (state.theme) return state.theme;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 const state = {
@@ -20,7 +55,8 @@ const state = {
   collapsed: {},
   reportOpen: false,
   page: getPageFromHash(),
-  doshaInfoOpen: null
+  doshaInfoOpen: null,
+  theme: loadTheme()
 };
 
 function loadAnswers() {
@@ -90,65 +126,11 @@ const doshaIcons = {
   kapha: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 8c8 4 14 11 14 19a14 14 0 1 1-28 0c0-8 6-15 14-19z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 22v14M18 27h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`
 };
 
-// Premium embossed heritage-seal rendering of the Hitayu peepal emblem —
-// metallic gold tree on a deep forest-green disc, double gold ring, subtle
-// shine. Reused at hero scale and at report-header scale.
+// The Hitayu peepal emblem — the gold tree/lotus mark cropped from the
+// official logo artwork (public/hitayu-logo.png), background removed.
+// Reused at hero scale and at report-header scale.
 function peepalEmblem() {
-  return `
-  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hitayu peepal tree emblem">
-    <defs>
-      <radialGradient id="hEmbDisc" cx="46%" cy="34%" r="75%">
-        <stop offset="0%" stop-color="#24503a"/>
-        <stop offset="65%" stop-color="#173a26"/>
-        <stop offset="100%" stop-color="#0d2216"/>
-      </radialGradient>
-      <linearGradient id="hEmbRing" x1="10%" y1="0%" x2="90%" y2="100%">
-        <stop offset="0%" stop-color="#f6e6b0"/>
-        <stop offset="28%" stop-color="#cf9f52"/>
-        <stop offset="52%" stop-color="#8a5f22"/>
-        <stop offset="76%" stop-color="#ecca84"/>
-        <stop offset="100%" stop-color="#a97b34"/>
-      </linearGradient>
-      <linearGradient id="hEmbLeaf" x1="10%" y1="0%" x2="90%" y2="100%">
-        <stop offset="0%" stop-color="#f8ecc4"/>
-        <stop offset="45%" stop-color="#d9b56e"/>
-        <stop offset="100%" stop-color="#8a5f22"/>
-      </linearGradient>
-      <radialGradient id="hEmbSheen" cx="38%" cy="28%" r="55%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-      </radialGradient>
-      <filter id="hEmbGlow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="1.4" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-
-    <circle cx="100" cy="100" r="96" fill="url(#hEmbDisc)"/>
-    <circle cx="100" cy="100" r="94" fill="none" stroke="url(#hEmbRing)" stroke-width="4" filter="url(#hEmbGlow)"/>
-    <circle cx="100" cy="100" r="86" fill="none" stroke="url(#hEmbRing)" stroke-width="1.1" opacity="0.75"/>
-    <circle cx="100" cy="100" r="80" fill="none" stroke="#f6e6b0" stroke-width="0.6" opacity="0.28"/>
-
-    <!-- canopy -->
-    <g>
-      <circle cx="100" cy="70" r="30" fill="url(#hEmbLeaf)" opacity="0.95"/>
-      <circle cx="76" cy="82" r="23" fill="url(#hEmbLeaf)" opacity="0.9"/>
-      <circle cx="124" cy="82" r="23" fill="url(#hEmbLeaf)" opacity="0.9"/>
-      <circle cx="86" cy="52" r="19" fill="url(#hEmbLeaf)" opacity="0.92"/>
-      <circle cx="114" cy="52" r="19" fill="url(#hEmbLeaf)" opacity="0.92"/>
-      <circle cx="100" cy="40" r="14" fill="url(#hEmbLeaf)" opacity="0.95"/>
-    </g>
-
-    <!-- trunk + roots -->
-    <path d="M100 96c0 16-2 32 0 48" stroke="url(#hEmbRing)" stroke-width="5.5" stroke-linecap="round" fill="none"/>
-    <path d="M100 118c-8 6-16 8-24 8M100 128c8 6 16 8 24 8M100 108c-6 4-11 5-16 5M100 108c6 4 11 5 16 5" stroke="url(#hEmbRing)" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.9"/>
-
-    <!-- leaf bud accent -->
-    <path d="M100 30c-6 0-11 5-11 11 0 8 11 20 11 20s11-12 11-20c0-6-5-11-11-11z" fill="url(#hEmbLeaf)"/>
-
-    <ellipse cx="76" cy="56" rx="52" ry="38" fill="url(#hEmbSheen)"/>
-  </svg>
-  `;
+  return `<img src="/hitayu-logo.png" alt="Hitayu peepal tree emblem" />`;
 }
 
 const doshaKeys = ['vata', 'pitta', 'kapha'];
@@ -174,6 +156,9 @@ const doshaSimpleInfo = {
   }
 };
 
+const sunIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+const moonIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 14.2A8.5 8.5 0 1 1 9.8 4a6.8 6.8 0 0 0 10.2 10.2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+
 // ==================== Nav ====================
 function renderNav() {
   const links = [
@@ -181,16 +166,22 @@ function renderNav() {
     { key: 'about', label: 'About Us' },
     { key: 'products', label: 'Products' }
   ];
+  const isDark = effectiveTheme() === 'dark';
   return `
     <nav class="site-nav">
       <div class="site-nav__inner">
         <a class="site-nav__brand" href="#home" data-nav="home">Hitayu</a>
-        <div class="site-nav__links">
-          ${links
-            .map(
-              (l) => `<a href="#${l.key}" class="site-nav__link ${state.page === l.key ? 'site-nav__link--active' : ''}" data-nav="${l.key}">${l.label}</a>`
-            )
-            .join('')}
+        <div class="site-nav__right">
+          <div class="site-nav__links">
+            ${links
+              .map(
+                (l) => `<a href="#${l.key}" class="site-nav__link ${state.page === l.key ? 'site-nav__link--active' : ''}" data-nav="${l.key}">${l.label}</a>`
+              )
+              .join('')}
+          </div>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="${isDark ? 'Switch to light mode' : 'Switch to dark mode'}" aria-pressed="${isDark}">
+            ${isDark ? moonIcon : sunIcon}
+          </button>
         </div>
       </div>
     </nav>
@@ -394,13 +385,20 @@ function renderSection(section, index) {
   const isCollapsed = !!state.collapsed[section.title];
   return `
     <section class="chapter ${isCollapsed ? 'chapter--collapsed' : ''}" style="--chapter-index:${index}">
-      <div class="chapter__header">
+      <div
+        class="chapter__header"
+        data-toggle-section="${section.title}"
+        role="button"
+        tabindex="0"
+        aria-expanded="${!isCollapsed}"
+        aria-label="${isCollapsed ? 'Expand' : 'Collapse'} ${section.title}"
+      >
         <span class="chapter__number">${String(index + 1).padStart(2, '0')}</span>
         <h2 class="chapter__title">${section.title}</h2>
         <div class="chapter__divider" aria-hidden="true"></div>
-        <button type="button" class="chapter__toggle" data-toggle-section="${section.title}" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand' : 'Collapse'} ${section.title}">
-          <span class="chapter__toggle-icon" aria-hidden="true">${isCollapsed ? '+' : '–'}</span>
-        </button>
+        <span class="chapter__toggle" aria-hidden="true">
+          <span class="chapter__toggle-icon">${isCollapsed ? '+' : '–'}</span>
+        </span>
       </div>
       ${
         isCollapsed
@@ -649,6 +647,16 @@ function withFocusPreserved(fn) {
 }
 
 function attachHandlers() {
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      state.theme = effectiveTheme() === 'dark' ? 'light' : 'dark';
+      saveTheme(state.theme);
+      applyTheme();
+      render();
+    });
+  }
+
   document.querySelectorAll('[data-nav]').forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -702,11 +710,18 @@ function attachHandlers() {
     });
   });
 
-  document.querySelectorAll('.chapter__toggle').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const title = btn.dataset.toggleSection;
+  document.querySelectorAll('.chapter__header').forEach((header) => {
+    const toggle = () => {
+      const title = header.dataset.toggleSection;
       state.collapsed[title] = !state.collapsed[title];
       render();
+    };
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
     });
   });
 
@@ -790,4 +805,11 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (!state.theme) render();
+  });
+}
+
+applyTheme();
 render();

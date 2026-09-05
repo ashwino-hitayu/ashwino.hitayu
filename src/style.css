@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+Devanagari:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
 
 :root {
   /* -------- Deep Forest Green -------- */
@@ -40,6 +40,21 @@
   --kapha-ink: #2c4a37;
   --kapha-tint: #fdfcf6;
 
+  /* -------- Semantic (theme-aware) text tones --------
+     Card backgrounds (ivory/parchment) and this text swap together in dark
+     mode; the forest greens themselves stay put since they're already a
+     dark, brand-coloured surface in both themes. */
+  --heading: var(--forest);
+  --heading-soft: var(--forest-soft);
+  --vata-label: var(--vata);
+  --pitta-label: var(--pitta);
+  --kapha-label: var(--kapha-ink);
+  --option-hover-bg: #fffaf0;
+  /* Light text for surfaces that are always dark forest-green, in both
+     themes (masthead, score panel, primary buttons) — never overridden
+     below, unlike --ivory-warm which doubles as a card background. */
+  --on-forest: #fbf3df;
+
   --radius-tile: 8px;
   --shadow-soft: 0 10px 26px rgba(20, 14, 4, 0.14);
   --shadow-card: 0 6px 18px rgba(20, 14, 4, 0.1);
@@ -47,6 +62,110 @@
 
   font-family: 'Lora', Georgia, serif;
   color: var(--ink);
+  color-scheme: light;
+}
+
+/* ==================== Dark mode ====================
+   Same tokens, dark values — everything that reads var(--ivory), var(--ink),
+   etc. repaints automatically. The report page is pinned to its light
+   values below since it represents a printed paper document. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ivory: #15130d;
+    --ivory-warm: #201c14;
+    --parchment: #2a2317;
+    --parchment-deep: #372d1a;
+    --paper-line: rgba(230, 200, 140, 0.16);
+
+    --ink: #f2ead6;
+    --ink-soft: #cfc2a0;
+    --ink-faint: #9c8f6c;
+
+    --gold-deep: #e0b563;
+    --gold-ink: #caa156;
+
+    --heading: #f0e6cf;
+    --heading-soft: #c9b280;
+    --vata-label: #86b6dd;
+    --pitta-label: #e8926a;
+    --kapha-label: #f0ece0;
+    --option-hover-bg: #2a251a;
+    --nav-bg: rgba(21, 19, 13, 0.9);
+    --texture-opacity: 0.35;
+    --texture-blend: soft-light;
+
+    --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ivory: #15130d;
+  --ivory-warm: #201c14;
+  --parchment: #2a2317;
+  --parchment-deep: #372d1a;
+  --paper-line: rgba(230, 200, 140, 0.16);
+
+  --ink: #f2ead6;
+  --ink-soft: #cfc2a0;
+  --ink-faint: #9c8f6c;
+
+  --gold-deep: #e0b563;
+  --gold-ink: #caa156;
+
+  --heading: #f0e6cf;
+  --heading-soft: #c9b280;
+  --vata-label: #86b6dd;
+  --pitta-label: #e8926a;
+  --kapha-label: #f0ece0;
+  --option-hover-bg: #2a251a;
+  --nav-bg: rgba(21, 19, 13, 0.9);
+  --texture-opacity: 0.35;
+  --texture-blend: soft-light;
+
+  --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* The printed report always renders as paper, regardless of app theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .report-page {
+    --ivory: #faf6ea;
+    --ivory-warm: #fbf3df;
+    --parchment: #f2e8ce;
+    --parchment-deep: #e6d8ae;
+    --paper-line: rgba(58, 45, 20, 0.16);
+    --ink: #241c10;
+    --ink-soft: #4a3d26;
+    --ink-faint: #7c6d4d;
+    --gold-deep: #8a5f22;
+    --gold-ink: #6b481a;
+    --heading: var(--forest);
+    --heading-soft: var(--forest-soft);
+    --vata-label: var(--vata);
+    --pitta-label: var(--pitta);
+    --kapha-label: var(--kapha-ink);
+    color-scheme: light;
+  }
+}
+:root[data-theme="dark"] .report-page {
+  --ivory: #faf6ea;
+  --ivory-warm: #fbf3df;
+  --parchment: #f2e8ce;
+  --parchment-deep: #e6d8ae;
+  --paper-line: rgba(58, 45, 20, 0.16);
+  --ink: #241c10;
+  --ink-soft: #4a3d26;
+  --ink-faint: #7c6d4d;
+  --gold-deep: #8a5f22;
+  --gold-ink: #6b481a;
+  --heading: var(--forest);
+  --heading-soft: var(--forest-soft);
+  --vata-label: var(--vata);
+  --pitta-label: var(--pitta);
+  --kapha-label: var(--kapha-ink);
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -73,8 +192,8 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.18;
-  mix-blend-mode: multiply;
+  opacity: var(--texture-opacity, 0.18);
+  mix-blend-mode: var(--texture-blend, multiply);
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
 }
 
@@ -92,7 +211,7 @@ body {
   top: 0;
   z-index: 40;
   margin: 0;
-  background: rgba(250, 246, 234, 0.94);
+  background: var(--nav-bg, rgba(250, 246, 234, 0.94));
   backdrop-filter: blur(6px);
   border-radius: 0 0 14px 14px;
   border: 1px solid var(--paper-line);
@@ -109,10 +228,11 @@ body {
   font-family: 'Marcellus', serif;
   font-size: 17px;
   letter-spacing: 0.08em;
-  color: var(--forest);
+  color: var(--heading);
   text-decoration: none;
   text-transform: uppercase;
 }
+.site-nav__right { display: flex; align-items: center; gap: 10px; }
 .site-nav__links { display: flex; gap: 6px; }
 .site-nav__link {
   font-family: 'Marcellus', serif;
@@ -123,9 +243,36 @@ body {
   padding: 8px 14px;
   border-radius: 999px;
 }
-.site-nav__link:hover { background: rgba(179, 135, 63, 0.1); color: var(--forest); }
-.site-nav__link--active { background: var(--forest); color: var(--ivory-warm); }
-.site-nav__link--active:hover { background: var(--forest-mid); color: var(--ivory-warm); }
+.site-nav__link:hover { background: rgba(179, 135, 63, 0.1); color: var(--heading); }
+.site-nav__link--active { background: var(--forest); color: var(--on-forest); }
+.site-nav__link--active:hover { background: var(--forest-mid); color: var(--on-forest); }
+
+.theme-toggle {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: transparent;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle:hover { background: rgba(179, 135, 63, 0.1); border-color: var(--gold); color: var(--heading); }
+.theme-toggle:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  .site-nav__inner { height: auto; min-height: 54px; padding: 8px 12px; flex-wrap: wrap; gap: 8px; row-gap: 6px; }
+  .site-nav__brand { font-size: 15px; }
+  .site-nav__right { gap: 6px; }
+  .site-nav__links { gap: 2px; }
+  .site-nav__link { padding: 7px 10px; font-size: 12px; }
+  .theme-toggle { width: 30px; height: 30px; }
+  .theme-toggle svg { width: 15px; height: 15px; }
+}
 
 /* ==================== Masthead / Branding ==================== */
 .masthead {
@@ -149,20 +296,21 @@ body {
 }
 
 .masthead__emblem {
-  width: 88px;
-  height: 88px;
-  margin: 0 auto 14px;
-  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.45));
+  width: 150px;
+  height: auto;
+  margin: 0 auto 10px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
 }
-.masthead__emblem svg { width: 100%; height: 100%; display: block; }
+.masthead__emblem img { width: 100%; height: auto; display: block; }
 @media (max-width: 640px) {
-  .masthead__emblem { width: 72px; height: 72px; }
+  .masthead__emblem { width: 120px; }
 }
 
 .masthead__clinic {
-  font-family: 'Marcellus', serif;
+  font-family: 'Playfair Display', 'Marcellus', serif;
+  font-weight: 700;
   color: var(--gold-pale);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   font-size: clamp(20px, 3.6vw, 30px);
   text-transform: uppercase;
   margin: 0 0 6px;
@@ -185,7 +333,7 @@ body {
 .masthead__title {
   font-family: 'Cormorant Garamond', 'Marcellus', serif;
   font-weight: 600;
-  color: var(--ivory-warm);
+  color: var(--on-forest);
   font-size: clamp(15px, 2vw, 20px);
   letter-spacing: 0.06em;
   line-height: 1.2;
@@ -239,7 +387,7 @@ body {
 .dosha-medallion__icon--vata { color: #6fa8d4; filter: drop-shadow(0 0 5px rgba(111, 168, 212, 0.4)); }
 .dosha-medallion__icon--pitta { color: #e2794c; filter: drop-shadow(0 0 5px rgba(226, 121, 76, 0.4)); }
 .dosha-medallion__icon--kapha { color: #ffffff; filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.45)); }
-.dosha-medallion__name { font-family: 'Marcellus', serif; color: var(--ivory-warm); font-size: 13.5px; }
+.dosha-medallion__name { font-family: 'Marcellus', serif; color: var(--on-forest); font-size: 13.5px; }
 .dosha-medallion__tag { color: rgba(250, 246, 234, 0.55); font-size: 10.5px; font-style: italic; }
 
 .masthead__subtitle {
@@ -279,7 +427,7 @@ body {
 .profile-form__heading {
   font-family: 'Marcellus', serif;
   font-size: 22px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 6px;
 }
 .profile-form__sub {
@@ -301,7 +449,7 @@ body {
   font-family: 'Marcellus', serif;
   font-size: 12px;
   letter-spacing: 0.04em;
-  color: var(--forest);
+  color: var(--heading);
 }
 .profile-form__field input,
 .profile-form__field select {
@@ -356,7 +504,7 @@ body {
   font-family: 'Marcellus', serif;
   font-style: italic;
   font-size: 15px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 22px;
 }
 
@@ -449,7 +597,9 @@ body {
   align-self: stretch;
 }
 @media (max-width: 900px) {
-  .assessment-layout { grid-template-columns: 1fr; }
+  .assessment-layout { grid-template-columns: 1fr; gap: 20px; }
+  .assessment-layout__side { order: -1; }
+  .score-panel { position: static; }
 }
 
 /* ==================== Score panel ==================== */
@@ -465,7 +615,7 @@ body {
 
 .score-panel__title {
   font-family: 'Marcellus', serif;
-  color: var(--ivory-warm);
+  color: var(--on-forest);
   font-size: 14px;
   letter-spacing: 0.03em;
   margin: 0 0 18px;
@@ -507,7 +657,7 @@ body {
 
 .figure__count {
   font-family: 'Marcellus', serif;
-  color: var(--ivory-warm);
+  color: var(--on-forest);
   font-size: 15px;
 }
 
@@ -552,10 +702,21 @@ body {
   align-items: center;
   gap: 14px;
   margin-bottom: 6px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 6px;
+  margin-left: -6px;
+  margin-right: -6px;
+}
+.chapter__header:hover { background: rgba(179, 135, 63, 0.08); }
+.chapter__header:hover .chapter__toggle { background: rgba(179, 135, 63, 0.12); }
+.chapter__header:focus-visible {
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 2px;
 }
 .chapter__number {
   font-family: 'Marcellus', serif;
-  color: var(--ivory-warm);
+  color: var(--on-forest);
   background: var(--forest);
   font-size: 13px;
   border: 1px solid var(--gold);
@@ -569,9 +730,9 @@ body {
 }
 .chapter__title {
   font-family: 'Marcellus', serif;
-  color: var(--forest);
+  color: var(--heading);
   font-size: clamp(19px, 3vw, 25px);
-  font-weight: 400;
+  font-weight: 700;
   margin: 0;
   white-space: nowrap;
 }
@@ -599,6 +760,14 @@ body {
 }
 .chapter__toggle:hover { background: rgba(179, 135, 63, 0.12); }
 
+@media (max-width: 480px) {
+  .chapter__title { white-space: normal; font-size: 17px; line-height: 1.2; }
+  .chapter__divider { display: none; }
+  .chapter__header { gap: 10px; }
+  .chapter__number { width: 26px; height: 26px; font-size: 12px; }
+  .chapter__toggle { width: 26px; height: 26px; }
+}
+
 .chapter__collapsed-hint {
   margin: 12px 0 0;
   font-size: 13px;
@@ -622,9 +791,9 @@ body {
     text-transform: uppercase;
     text-align: center;
   }
-  .chapter__rows-head-item--vata { color: var(--vata); }
-  .chapter__rows-head-item--pitta { color: var(--pitta); }
-  .chapter__rows-head-item--kapha { color: var(--kapha-ink); }
+  .chapter__rows-head-item--vata { color: var(--vata-label); }
+  .chapter__rows-head-item--pitta { color: var(--pitta-label); }
+  .chapter__rows-head-item--kapha { color: var(--kapha-label); }
 }
 
 .chapter__rows { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
@@ -648,7 +817,7 @@ body {
 .row__label {
   font-family: 'Marcellus', serif;
   font-size: 14.5px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 10px;
 }
 @media (min-width: 760px) { .row__label { margin: 0; } }
@@ -675,7 +844,7 @@ body {
   line-height: 1.45;
   cursor: pointer;
 }
-.option:hover { border-color: var(--gold); background: #fffaf0; }
+.option:hover { border-color: var(--gold); background: var(--option-hover-bg); }
 .option:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
 
 .option__mark {
@@ -764,7 +933,7 @@ body {
   cursor: pointer;
   border: 1px solid var(--gold);
 }
-.btn--primary { background: var(--forest); color: var(--ivory-warm); border-color: var(--forest); }
+.btn--primary { background: var(--forest); color: var(--on-forest); border-color: var(--forest); }
 .btn--primary:hover { background: var(--forest-mid); }
 .btn--ghost { background: transparent; color: var(--gold-deep); }
 .btn--ghost:hover { background: rgba(179, 135, 63, 0.1); }
@@ -786,8 +955,9 @@ body {
   border-top: 1px solid var(--paper-line);
 }
 .site-footer__name {
-  font-family: 'Marcellus', serif;
-  color: var(--forest);
+  font-family: 'Playfair Display', 'Marcellus', serif;
+  font-weight: 700;
+  color: var(--heading);
   font-size: 15px;
   margin: 0 0 4px;
 }
@@ -822,7 +992,7 @@ body {
   font-family: 'Cormorant Garamond', 'Marcellus', serif;
   font-weight: 600;
   font-size: clamp(24px, 4vw, 32px);
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 6px;
 }
 .about-card__suffix {
@@ -840,7 +1010,7 @@ body {
   font-family: 'Marcellus', serif;
   font-style: italic;
   font-size: 14px;
-  color: var(--forest-soft);
+  color: var(--heading-soft);
   margin: 0 0 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--paper-line);
@@ -860,7 +1030,7 @@ body {
   gap: 6px;
 }
 .about-card__meta p { margin: 0; font-size: 13px; color: var(--ink-soft); }
-.about-card__meta strong { color: var(--forest); }
+.about-card__meta strong { color: var(--heading); }
 
 /* ==================== Products / empty state ==================== */
 .empty-state {
@@ -885,7 +1055,7 @@ body {
   font-family: 'Cormorant Garamond', 'Marcellus', serif;
   font-weight: 600;
   font-size: clamp(24px, 4vw, 32px);
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 12px;
 }
 .empty-state__text {
@@ -937,13 +1107,13 @@ body {
 .dosha-info-close:hover { background: rgba(179, 135, 63, 0.12); }
 .dosha-info-icon { display: inline-block; width: 40px; height: 40px; margin: 0 0 14px; }
 .dosha-info-icon svg { width: 100%; height: 100%; }
-.dosha-info-icon--vata { color: var(--vata); }
-.dosha-info-icon--pitta { color: var(--pitta); }
-.dosha-info-icon--kapha { color: var(--kapha-ink); }
+.dosha-info-icon--vata { color: var(--vata-label); }
+.dosha-info-icon--pitta { color: var(--pitta-label); }
+.dosha-info-icon--kapha { color: var(--kapha-label); }
 .dosha-info-title {
   font-family: 'Marcellus', serif;
   font-size: 19px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 12px;
 }
 .dosha-info-text {
@@ -974,7 +1144,7 @@ body {
 }
 .report-overlay__toolbar .btn {
   background: var(--ivory-warm);
-  color: var(--forest);
+  color: var(--heading);
 }
 .report-overlay__toolbar .btn--primary {
   background: var(--gold-deep);
@@ -1005,15 +1175,16 @@ body {
   margin-bottom: 18px;
   border-bottom: 2px solid var(--gold);
 }
-.report-page__emblem { width: 74px; height: 74px; flex-shrink: 0; }
-.report-page__emblem svg { width: 100%; height: 100%; }
+.report-page__emblem { width: 100px; height: auto; flex-shrink: 0; }
+.report-page__emblem img { width: 100%; height: auto; display: block; }
 .report-page__clinic { flex: 1; }
 .report-page__clinic-name {
-  font-family: 'Marcellus', serif;
+  font-family: 'Playfair Display', 'Marcellus', serif;
+  font-weight: 700;
   font-size: 17px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 3px;
 }
 .report-page__clinic-sub {
@@ -1036,7 +1207,7 @@ body {
   font-family: 'Cormorant Garamond', 'Marcellus', serif;
   font-weight: 600;
   font-size: 27px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 6px 0 22px;
 }
 
@@ -1067,7 +1238,7 @@ body {
   font-size: 12px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--forest-soft);
+  color: var(--heading-soft);
   margin: 0 0 4px;
 }
 .report-page__result-title {
@@ -1075,7 +1246,7 @@ body {
   font-family: 'Cormorant Garamond', 'Marcellus', serif;
   font-weight: 600;
   font-size: 26px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 20px;
 }
 
@@ -1143,7 +1314,7 @@ body {
 .report-page__footer-name {
   font-family: 'Marcellus', serif;
   font-size: 13px;
-  color: var(--forest);
+  color: var(--heading);
   margin: 0 0 2px;
 }
 .report-page__footer-line {
