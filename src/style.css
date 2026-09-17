@@ -639,24 +639,42 @@ body {
 
 .figure__body--large {
   width: 100%;
-  max-width: 108px;
-  height: 178px;
+  max-width: 104px;
+  height: 229px;
   margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 0 14px rgba(217, 181, 110, 0.35));
 }
 
-.figure__svg { width: 100%; height: 100%; display: block; overflow: visible; }
-
-.figure__outline {
-  fill: rgba(250, 246, 234, 0.05);
-  stroke: var(--gold);
-  stroke-width: 2;
-  opacity: 0.8;
+/* The silhouette itself is a real traced image, used as a mask so the
+   gradient/tint shows through only inside the body — male by default,
+   swapped to the female silhouette when that's the selected profile sex. */
+.figure__fill,
+.figure__sheen {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: url('/figure-body-mask-male.png');
+  mask-image: url('/figure-body-mask-male.png');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
-.figure__zone { transition: height 0.4s ease, y 0.4s ease; }
-.figure__zone--vata { fill: var(--vata-selected); }
-.figure__zone--pitta { fill: var(--pitta-selected); }
-.figure__zone--kapha { fill: var(--kapha-selected); }
+.figure--female .figure__fill,
+.figure--female .figure__sheen {
+  -webkit-mask-image: url('/figure-body-mask-female.png');
+  mask-image: url('/figure-body-mask-female.png');
+}
+
+.figure__fill { transition: background 0.4s ease; }
+
+.figure__sheen {
+  pointer-events: none;
+  background: radial-gradient(ellipse at 38% 20%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 55%);
+}
 
 .score-panel__legend {
   display: flex;

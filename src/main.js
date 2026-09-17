@@ -304,43 +304,42 @@ function renderWisdomGroup(keys) {
   `;
 }
 
-const figureShape = `
-  <circle cx="32" cy="16" r="12"/>
-  <path d="M18 30 Q18 28 20 28 L44 28 Q46 28 46 30 L48 64 Q48 68 44 68 L20 68 Q16 68 16 64 Z"/>
-  <rect x="6" y="30" width="10" height="42" rx="5"/>
-  <rect x="48" y="30" width="10" height="42" rx="5"/>
-  <rect x="20" y="68" width="10" height="46" rx="5"/>
-  <rect x="34" y="68" width="10" height="46" rx="5"/>
-`;
-
-// One body, three zones — legs (Vata), belly (Pitta), chest (Kapha) —
-// each fills upward within its own band as that dosha's count rises.
-const figureZoneBands = {
-  kapha: { top: 4, bottom: 45 },
-  pitta: { top: 45, bottom: 68 },
-  vata: { top: 68, bottom: 114 }
-};
-
+// The body silhouette is a real image (public/figure-body-mask-male.png /
+// -female.png) — an anatomically natural silhouette extracted from a
+// reference illustration, used as a CSS mask — rather than a hand-coded
+// SVG path, since a coded path can't match a genuine illustration's
+// proportions and shading. Male is the default; the female silhouette is
+// swapped in when that's the selected profile sex.
+// One body, entirely covered — the relative Vata/Pitta/Kapha split (which
+// always sums to 100% once anything is answered) blends top to bottom as
+// one soft gradient (Kapha → Pitta → Vata), so a lone dominant dosha
+// colours the whole figure instead of just its own small corner, and
+// neighbouring doshas melt into each other rather than cutting sharply.
 function renderCombinedFigure(totals) {
-  const clipId = 'figure-clip-combined';
-  const zoneRect = (key) => {
-    const band = figureZoneBands[key];
-    const pct = Math.round((totals[key] / totalQuestions) * 100);
-    const bandHeight = band.bottom - band.top;
-    const fillHeight = (pct / 100) * bandHeight;
-    const y = band.bottom - fillHeight;
-    return `<rect class="figure__zone figure__zone--${key}" x="0" y="${y}" width="64" height="${fillHeight}" clip-path="url(#${clipId})"></rect>`;
-  };
+  const pct = computePercents(totals);
+  const hasAnswers = totals.vata + totals.pitta + totals.kapha > 0;
+  const isFemale = state.profile.gender === 'female';
+
+  const b1 = pct.kapha;
+  const b2 = pct.kapha + pct.pitta;
+  const blend1 = Math.min(3, pct.kapha / 2, pct.pitta / 2);
+  const blend2 = Math.min(3, pct.pitta / 2, pct.vata / 2);
+
+  const fill = hasAnswers
+    ? `linear-gradient(to bottom,
+        var(--kapha-selected) 0%,
+        var(--kapha-selected) ${Math.max(0, b1 - blend1)}%,
+        var(--pitta-selected) ${Math.min(100, b1 + blend1)}%,
+        var(--pitta-selected) ${Math.max(0, b2 - blend2)}%,
+        var(--vata-selected) ${Math.min(100, b2 + blend2)}%,
+        var(--vata-selected) 100%)`
+    : 'rgba(250, 246, 234, 0.2)';
+
   return `
-    <div class="figure figure--combined">
+    <div class="figure figure--combined ${isFemale ? 'figure--female' : ''}">
       <div class="figure__body figure__body--large">
-        <svg viewBox="0 0 64 120" class="figure__svg" aria-hidden="true">
-          <defs>
-            <clipPath id="${clipId}">${figureShape}</clipPath>
-          </defs>
-          <g class="figure__outline">${figureShape}</g>
-          ${doshaKeys.map(zoneRect).join('')}
-        </svg>
+        <div class="figure__fill" style="background: ${fill};"></div>
+        <div class="figure__sheen" aria-hidden="true"></div>
       </div>
     </div>
   `;
@@ -587,7 +586,6 @@ function renderHomePage() {
       </div>
       ${renderResult()}
     </main>
-    ${renderReportOverlay()}
   `;
 }
 
@@ -639,6 +637,7 @@ function render() {
       ${renderPage()}
       ${renderFooter()}
     </div>
+    ${renderReportOverlay()}
     ${renderDoshaInfoOverlay()}
   `;
   attachHandlers();
