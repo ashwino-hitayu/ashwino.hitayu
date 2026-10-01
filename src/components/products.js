@@ -6,7 +6,7 @@
 // the popup gets a full gallery with prev/next arrows and thumbnails.
 import { state } from '../state.js';
 import { products } from '../productsData.js';
-import { whatsappIcon, whatsappChatLink, productMessage, chevronLeftIcon, chevronRightIcon } from '../icons.js';
+import { whatsappIcon, whatsappLinkAttrs, productMessage, chevronLeftIcon, chevronRightIcon } from '../icons.js';
 
 // Seconds each photo rests in view, then seconds the slide to the next takes.
 const SLIDE_HOLD = 1.8;
@@ -49,7 +49,7 @@ export function warmProductTile(tileButton) {
 // (they're on screen); covers further down are lazy-loaded by the browser.
 export function renderProductTile(product, index = 0) {
   const warm = warmTiles.has(product.id);
-  const buyLink = whatsappChatLink(productMessage(product.name));
+  const buyLink = whatsappLinkAttrs(productMessage(product.name));
   const count = product.images.length;
   const slides = count > 1 ? [...product.images, product.images[0]] : product.images;
   const trackStyle = count > 1 ? ` style="--slide-name: product-tile-slide-${count}; --slide-duration: ${(SLIDE_HOLD + SLIDE_MOVE) * count}s"` : '';
@@ -70,7 +70,7 @@ export function renderProductTile(product, index = 0) {
         <span class="product-tile__name">${product.name}</span>
         <span class="product-tile__tagline" title="${product.tagline}">${product.tagline}</span>
       </button>
-      <a href="${buyLink}" target="_blank" rel="noopener" class="product-tile__buy">
+      <a ${buyLink} target="_blank" rel="noopener" class="product-tile__buy">
         <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
         Buy Now
       </a>
@@ -93,7 +93,7 @@ export function renderProductOverlay() {
   if (!id) return '';
   const product = products.find((p) => p.id === id);
   if (!product) return '';
-  const buyLink = whatsappChatLink(productMessage(product.name));
+  const buyLink = whatsappLinkAttrs(productMessage(product.name));
   const total = product.images.length;
   const index = Math.min(state.productImageIndex, total - 1);
   const hasMultiple = total > 1;
@@ -135,7 +135,7 @@ export function renderProductOverlay() {
           <ul class="product-overlay__benefits">
             ${product.benefits.map((b) => `<li>${b}</li>`).join('')}
           </ul>
-          <a href="${buyLink}" target="_blank" rel="noopener" class="brand-btn brand-btn--whatsapp">
+          <a ${buyLink} target="_blank" rel="noopener" class="brand-btn brand-btn--whatsapp">
             <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
             Order on WhatsApp
           </a>

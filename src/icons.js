@@ -14,17 +14,28 @@ export const moonIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.
 export const whatsappIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.7 8.3c.3-.6.6-.6.9-.6h.4c.2 0 .4 0 .6.4s.6 1.5.7 1.6c.1.1.1.3 0 .5s-.2.3-.3.4-.3.3-.1.6c.2.3.8 1.1 1.6 1.8 1 .9 1.8 1.1 2.1 1.3.3.1.5.1.6-.1.2-.2.6-.7.8-1 .2-.3.4-.2.6-.1l1.5.7c.2.1.4.2.4.3.1.2.1.9-.2 1.4-.4.6-1.4 1-2 1-.5 0-1.3 0-2.1-.5-1.5-.6-2.9-1.8-4-3.3-.6-.9-1-1.7-1.1-2.1-.1-.4-.3-1.2 0-1.8Z" fill="currentColor"/></svg>`;
 export const whatsappLink = 'https://wa.me/message/IG7NATE62RMJB1';
 
-// The clinic's WhatsApp number — digits only, with country code, no "+"
-// (e.g. '919876543210'). Pre-filled messages need it: the wa.me/message/…
-// short link above ignores ?text=. While this is empty, every chat link
-// falls back to the short link (no pre-filled message).
-export const whatsappNumber = '';
-
 export const consultMessage = "Hi, I'm interested in getting a consultation. Could you please help me book one?";
 export const productMessage = (name) => `Hi, I'm interested in ${name}. Could you please share more details?`;
 
-export function whatsappChatLink(message) {
-  return whatsappNumber ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}` : whatsappLink;
+// Pre-filled messages need the clinic's number (the short link above ignores
+// ?text=), but the number is deliberately never written into the page: links
+// keep the short link as their href, so hovering or copying a link doesn't
+// reveal it, and only a click on a WhatsApp button builds the
+// wa.me/<number>?text=… URL (see main.js). It's stored encoded (base64 of the
+// reversed digits) so bots scanning the site's JS for phone numbers miss it.
+const WHATSAPP_ENCODED = 'NTQ2MzUxNzEwNzE5';
+
+export function whatsappMessageUrl(message) {
+  const number = [...atob(WHATSAPP_ENCODED)].reverse().join('');
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+}
+
+const escapeAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+// Attributes for a WhatsApp chat link: the short link as href (also what a
+// new-tab click or "copy link" gets) + the message to pre-fill on click.
+export function whatsappLinkAttrs(message) {
+  return `href="${whatsappLink}" data-wa-message="${escapeAttr(message)}"`;
 }
 
 export const instagramIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>`;

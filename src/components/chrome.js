@@ -3,7 +3,7 @@
 import { doshas } from '../doshaData.js';
 import { state, doshaKeys, effectiveTheme } from '../state.js';
 import { pathFor } from '../router.js';
-import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappChatLink, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink, menuIcon, closeIcon, chevronRightIcon } from '../icons.js';
+import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappLinkAttrs, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink, menuIcon, closeIcon, chevronRightIcon } from '../icons.js';
 
 export function renderNav() {
   const links = [
@@ -28,7 +28,7 @@ export function renderNav() {
             <a href="${instagramLink}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--instagram" aria-label="Follow us on Instagram">
               ${instagramIcon}
             </a>
-            <a href="${whatsappChatLink(consultMessage)}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--whatsapp" aria-label="Chat with us on WhatsApp">
+            <a ${whatsappLinkAttrs(consultMessage)} target="_blank" rel="noopener" class="social-nav-link social-nav-link--whatsapp" aria-label="Chat with us on WhatsApp">
               ${whatsappIcon}
             </a>
             <a href="${youtubeLink}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--youtube" aria-label="Watch us on YouTube">
@@ -133,15 +133,15 @@ export function renderMasthead(isLanding) {
 // shared by the landing and About pages.
 export function renderSocialButtons(whatsappLabel = 'Chat on WhatsApp') {
   const buttons = [
-    { href: whatsappChatLink(consultMessage), mod: 'whatsapp', icon: whatsappIcon, label: whatsappLabel },
-    { href: instagramLink, mod: 'instagram', icon: instagramIcon, label: 'Follow on Instagram' },
-    { href: youtubeLink, mod: 'youtube', icon: youtubeIcon, label: 'Watch on YouTube' }
+    { attrs: whatsappLinkAttrs(consultMessage), mod: 'whatsapp', icon: whatsappIcon, label: whatsappLabel },
+    { attrs: `href="${instagramLink}"`, mod: 'instagram', icon: instagramIcon, label: 'Follow on Instagram' },
+    { attrs: `href="${youtubeLink}"`, mod: 'youtube', icon: youtubeIcon, label: 'Watch on YouTube' }
   ];
   return `
     <div class="brand-btn-row">
       ${buttons
         .map(
-          (b) => `<a href="${b.href}" target="_blank" rel="noopener" class="brand-btn brand-btn--${b.mod}">
+          (b) => `<a ${b.attrs} target="_blank" rel="noopener" class="brand-btn brand-btn--${b.mod}">
             <span class="brand-btn__icon" aria-hidden="true">${b.icon}</span>
             ${b.label}
           </a>`

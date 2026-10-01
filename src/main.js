@@ -7,6 +7,7 @@ import { renderNav, renderDoshaInfoOverlay, renderFooter } from './components/ch
 import { renderReportOverlay } from './components/report.js';
 import { renderProductOverlay, renderImageLightbox, warmProductTile } from './components/products.js';
 import { products } from './productsData.js';
+import { whatsappMessageUrl } from './icons.js';
 import { renderPage } from './pages.js';
 
 const app = document.getElementById('app');
@@ -208,7 +209,11 @@ document.addEventListener('click', (e) => {
   if (!t) return;
   let el;
 
-  if (t.closest('#nav-menu-toggle')) {
+  if ((el = t.closest('a[data-wa-message]')) && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
+    // build the pre-filled wa.me link only now, so the number never sits in the page
+    e.preventDefault();
+    window.open(whatsappMessageUrl(el.dataset.waMessage), '_blank', 'noopener');
+  } else if (t.closest('#nav-menu-toggle')) {
     state.navMenuOpen = !state.navMenuOpen;
     render();
   } else if (t.id === 'nav-menu-backdrop') {
