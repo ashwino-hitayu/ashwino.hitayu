@@ -238,13 +238,11 @@ body {
   padding: 0 18px;
 }
 .site-nav__brand {
-  font-family: 'Marcellus', serif;
-  font-size: 17px;
-  letter-spacing: 0.08em;
-  color: var(--heading);
-  text-decoration: none;
-  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
+.site-nav__brand img { height: 100%; width: auto; display: block; }
 .site-nav__right { display: flex; align-items: center; gap: 10px; }
 .site-nav__links { display: flex; gap: 6px; }
 .site-nav__link {
@@ -279,7 +277,7 @@ body {
 
 @media (max-width: 480px) {
   .site-nav__inner { height: auto; min-height: 54px; padding: 8px 12px; flex-wrap: wrap; gap: 8px; row-gap: 6px; }
-  .site-nav__brand { font-size: 15px; }
+  .site-nav__brand { height: 32px; }
   .site-nav__right { gap: 6px; }
   .site-nav__links { gap: 2px; }
   .site-nav__link { padding: 7px 10px; font-size: 12px; }
@@ -389,11 +387,17 @@ body {
   gap: 4px;
   font-family: inherit;
   cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .dosha-medallion:hover, .dosha-medallion:focus-visible {
   background: rgba(250, 246, 234, 0.1);
   border-color: var(--gold-light);
   outline: none;
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px rgba(217, 181, 110, 0.4), 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+.dosha-medallion:active {
+  transform: scale(1.03);
 }
 .dosha-medallion__icon { width: 22px; height: 22px; }
 .dosha-medallion__icon svg { width: 100%; height: 100%; }
@@ -978,6 +982,31 @@ body {
 .btn--primary:hover { background: var(--forest-mid); }
 .btn--ghost { background: transparent; color: var(--gold-deep); }
 .btn--ghost:hover { background: rgba(179, 135, 63, 0.1); }
+
+.landing-choices {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin: 34px 0;
+}
+.landing-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.landing-choice__btn {
+  min-width: 160px;
+  text-align: center;
+  text-decoration: none;
+}
+.landing-choice__caption {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0;
+}
 
 .result__disclaimer {
   max-width: 640px;

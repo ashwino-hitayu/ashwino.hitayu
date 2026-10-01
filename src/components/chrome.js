@@ -1,0 +1,90 @@
+// Shared page furniture used across routes: top nav, hero masthead, the
+// dosha info popup it launches, and the footer.
+import { doshas } from '../doshaData.js';
+import { state, doshaKeys, effectiveTheme } from '../state.js';
+import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo } from '../icons.js';
+
+export function renderNav() {
+  const links = [
+    { key: 'home', label: 'Home' },
+    { key: 'about', label: 'About Us' },
+    { key: 'products', label: 'Products' }
+  ];
+  const isDark = effectiveTheme() === 'dark';
+  return `
+    <nav class="site-nav">
+      <div class="site-nav__inner">
+        <a class="site-nav__brand" href="#home" data-nav="home" aria-label="Hitayu — Home">${peepalEmblem()}</a>
+        <div class="site-nav__right">
+          <div class="site-nav__links">
+            ${links
+              .map(
+                (l) => `<a href="#${l.key}" class="site-nav__link ${state.page === l.key ? 'site-nav__link--active' : ''}" data-nav="${l.key}">${l.label}</a>`
+              )
+              .join('')}
+          </div>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="${isDark ? 'Switch to light mode' : 'Switch to dark mode'}" aria-pressed="${isDark}">
+            ${isDark ? moonIcon : sunIcon}
+          </button>
+        </div>
+      </div>
+    </nav>
+  `;
+}
+
+export function renderDoshaInfoOverlay() {
+  const key = state.doshaInfoOpen;
+  if (!key) return '';
+  const info = doshaSimpleInfo[key];
+  return `
+    <div class="dosha-info-overlay" id="dosha-info-overlay">
+      <div class="dosha-info-card dosha-info-card--${key}">
+        <button type="button" class="dosha-info-close" id="dosha-info-close" aria-label="Close">×</button>
+        <span class="dosha-info-icon dosha-info-icon--${key}">${doshaIcons[key]}</span>
+        <h3 class="dosha-info-title">${info.title}</h3>
+        <p class="dosha-info-text">${info.text}</p>
+      </div>
+    </div>
+  `;
+}
+
+// isLanding swaps in landing-page-specific copy; the assessment page keeps
+// the original title and "Know Your Prakriti" line, but drops the clinic
+// name/tagline and the subtitle — the landing page already carries that
+// introduction, so the assessment page's hero stays leaner.
+export function renderMasthead(isLanding) {
+  return `
+    <header class="masthead">
+      <div class="masthead__emblem" aria-hidden="true">${peepalEmblem()}</div>
+      ${isLanding ? '<p class="masthead__clinic">Hitayu Ayurvedic Clinic &amp; Wellness Center</p>' : ''}
+      ${isLanding ? '<p class="masthead__clinic-sub">Rooted in Tradition · Grown for Your Wellbeing</p>' : ''}
+      <div class="masthead__rule" aria-hidden="true"></div>
+      <h1 class="masthead__title">${isLanding ? 'Understand Yourself Through Ayurveda' : 'Prakriti Assessment'}</h1>
+      ${isLanding ? '' : '<p class="masthead__know">Know Your Prakriti</p>'}
+      <p class="masthead__tag">Dosha Questionnaire</p>
+      <div class="masthead__doshas">
+        ${doshaKeys
+          .map(
+            (k) => `
+          <button type="button" class="dosha-medallion dosha-medallion--${k}" data-dosha-info="${k}" aria-label="What is ${doshas[k].name}?">
+            <span class="dosha-medallion__icon dosha-medallion__icon--${k}">${doshaIcons[k]}</span>
+            <span class="dosha-medallion__name">${doshas[k].name}</span>
+            <span class="dosha-medallion__tag">${doshas[k].tag}</span>
+          </button>`
+          )
+          .join('')}
+      </div>
+      ${isLanding ? '<p class="masthead__subtitle">An ancient self-portrait, drawn from the three doshas. Answer honestly, reflecting on your life as a whole — not just today.</p>' : ''}
+    </header>
+  `;
+}
+
+export function renderFooter() {
+  return `
+    <footer class="site-footer">
+      <p class="site-footer__name">Hitayu — Ayurvedic Clinic &amp; Wellness Center</p>
+      <p class="site-footer__line">Rooted in tradition. Grown for your wellbeing.</p>
+      <p class="site-footer__copyright">&copy; 2026 Hitayu Ayurvedic Clinic &amp; Wellness Center. All rights reserved.</p>
+    </footer>
+  `;
+}
