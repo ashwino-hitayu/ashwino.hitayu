@@ -3,12 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hitayu · Ayurvedic Clinic &amp; Wellness Center — Dosha Assessment</title>
-    <meta name="description" content="Discover your Ayurvedic mind-body constitution — a Prakriti assessment from Hitayu Ayurvedic Clinic & Wellness Center." />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>" />
+    <!-- Per-page values (__TITLE__ etc.) are filled in by vite.config.js, which
+         writes one HTML file per route (see src/seo.js) so search engines and
+         link previews (WhatsApp, Instagram) see each page's own details. -->
+    <title>__TITLE__</title>
+    <meta name="description" content="__DESCRIPTION__" />
+    <link rel="canonical" href="__URL__" />
+    <meta name="theme-color" content="#1c3d28" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hitayu Ayurvedic Clinic &amp; Wellness Center" />
+    <meta property="og:title" content="__TITLE__" />
+    <meta property="og:description" content="__DESCRIPTION__" />
+    <meta property="og:url" content="__URL__" />
+    <meta property="og:image" content="__IMAGE__" />
+    <meta name="twitter:card" content="summary_large_image" />
+    __JSONLD__
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=Noto+Serif+Devanagari:wght@500;600;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&amp;display=swap" />
+    <!-- Only the faces the site actually renders (audited); browsers map the
+         CSS weights onto these, e.g. Lora 700 -> 600, Devanagari 400 -> 500. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Cormorant+Garamond:wght@600&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;family=Noto+Serif+Devanagari:wght@500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap" />
     <script>
       (function () {
         try {
@@ -20,6 +37,13 @@
   </head>
   <body>
     <div id="app"></div>
+    <noscript>
+      <main style="max-width: 640px; margin: 40px auto; padding: 0 20px; font-family: Georgia, serif; line-height: 1.6">
+        <h1>Hitayu Ayurvedic Clinic &amp; Wellness Center</h1>
+        <p>Rooted in tradition, grown for your wellbeing. Discover your Ayurvedic constitution (Prakriti) with our free Vata–Pitta–Kapha assessment, and consult Dr. Hitesh Pant, B.A.M.S. Ayurvedic physician, for chronic conditions, pain management (Agnikarma, Viddhakarma), gut health and Marma therapy.</p>
+        <p>Please enable JavaScript to take the assessment. <a href="/about">About the doctor</a> · <a href="/products">Products</a></p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

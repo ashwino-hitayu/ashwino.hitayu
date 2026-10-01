@@ -1,8 +1,11 @@
 import './style.css';
-import { state, saveAnswers, saveProfile, saveTheme, applyTheme, effectiveTheme, getPageFromHash } from './state.js';
+import { state, saveAnswers, saveProfile, saveTheme, applyTheme, effectiveTheme } from './state.js';
+import { sections } from './doshaData.js';
+import { parsePath, pathFor, legacyHashPath } from './router.js';
+import { metaForPath } from './seo.js';
 import { renderNav, renderDoshaInfoOverlay, renderFooter } from './components/chrome.js';
 import { renderReportOverlay } from './components/report.js';
-import { renderProductOverlay, renderImageLightbox } from './components/products.js';
+import { renderProductOverlay, renderImageLightbox, warmProductTile } from './components/products.js';
 import { products } from './productsData.js';
 import { renderPage } from './pages.js';
 
@@ -23,6 +26,65 @@ function render() {
       ${renderImageLightbox()}
     `;
   if (!manageDialogFocus(focus)) restoreFocus(focus);
+  updateDocumentMeta();
+}
+
+// ==================== Routing ====================
+// Clean URLs via the History API; see router.js for the route table.
+
+function updateDocumentMeta() {
+  const meta = metaForPath(location.pathname);
+  if (document.title !== meta.title) document.title = meta.title;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+  if (!meta.noindex) document.querySelector('link[rel="canonical"]')?.setAttribute('href', location.origin + location.pathname);
+}
+
+// Syncs state with the current URL. Returns true if the page changed.
+function applyRoute() {
+  const { page, productId } = parsePath(location.pathname);
+  const pageChanged = page !== state.page;
+  state.page = page;
+  if (productId !== state.productOpen) {
+    state.productOpen = productId;
+    state.productImageIndex = 0;
+    state.lightboxOpen = false;
+  }
+  if (pageChanged) {
+    // popups belong to the page they were opened on
+    state.doshaInfoOpen = null;
+    state.reportOpen = false;
+    state.lightboxOpen = false;
+  }
+  return pageChanged;
+}
+
+function navigate(path, { replace = false, historyState = null } = {}) {
+  if (path !== location.pathname) {
+    history[replace ? 'replaceState' : 'pushState'](historyState, '', path);
+  }
+  const pageChanged = applyRoute();
+  if (pageChanged) window.scrollTo({ top: 0 });
+  render();
+}
+
+const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+// Scrolls to the first unanswered trait (expanding its section if collapsed).
+function goToNextUnanswered() {
+  for (const section of sections) {
+    const row = section.rows.find((r) => !state.answers[r.id]);
+    if (!row) continue;
+    if (state.collapsed[section.title]) {
+      state.collapsed[section.title] = false;
+      render();
+    }
+    const el = app.querySelector(`[data-row="${CSS.escape(row.id)}"]`);
+    if (el) {
+      el.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      el.querySelector('.option')?.focus({ preventScroll: true });
+    }
+    return;
+  }
 }
 
 // The report is the only other place the profile name/age appear, so typing
@@ -120,9 +182,15 @@ function trapTab(e) {
   }
 }
 
+// The product popup has its own URL (/products/:id). If we pushed that entry
+// when opening it, going back closes it (and keeps the Back button natural);
+// if the visitor arrived on the product link directly, swap in /products.
 function closeProductOverlay() {
-  state.productOpen = null;
-  state.lightboxOpen = false;
+  if (history.state?.productPopup) {
+    history.back();
+  } else {
+    navigate(pathFor('products'), { replace: true });
+  }
 }
 
 function stepProductImage(delta) {
@@ -145,12 +213,13 @@ document.addEventListener('click', (e) => {
     applyTheme();
     render();
   } else if ((el = t.closest('[data-nav]'))) {
+    // let the browser handle new-tab / new-window clicks
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
-    const page = el.dataset.nav;
-    state.page = page;
-    if (location.hash !== `#${page}`) location.hash = page;
-    window.scrollTo({ top: 0 });
-    render();
+    navigate(el.getAttribute('href'));
+    if (el.hasAttribute('data-resume')) goToNextUnanswered();
+  } else if (t.closest('[data-next-unanswered]')) {
+    goToNextUnanswered();
   } else if ((el = t.closest('[data-dosha-info]'))) {
     state.doshaInfoOpen = el.dataset.doshaInfo;
     render();
@@ -158,13 +227,9 @@ document.addEventListener('click', (e) => {
     state.doshaInfoOpen = null;
     render();
   } else if ((el = t.closest('[data-product-open]'))) {
-    state.productOpen = el.dataset.productOpen;
-    state.productImageIndex = 0;
-    state.lightboxOpen = false;
-    render();
+    navigate(pathFor('products', el.dataset.productOpen), { historyState: { productPopup: true } });
   } else if (t.id === 'product-overlay' || t.closest('#product-overlay-close')) {
     closeProductOverlay();
-    render();
   } else if (t.closest('[data-product-image-prev]')) {
     stepProductImage(-1);
     render();
@@ -202,7 +267,7 @@ document.addEventListener('click', (e) => {
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  } else if (t.closest('#open-report-btn')) {
+  } else if (t.closest('#open-report-btn, [data-open-report]')) {
     state.reportOpen = true;
     render();
   } else if (t.closest('#close-report-btn')) {
@@ -218,6 +283,14 @@ function toggleSection(header) {
   state.collapsed[title] = !state.collapsed[title];
   render();
 }
+
+// Fetch a product tile's slideshow photos the first time it's hovered/focused.
+const warmTile = (e) => {
+  const tile = e.target instanceof Element && e.target.closest('.product-tile__open');
+  if (tile) warmProductTile(tile);
+};
+document.addEventListener('mouseover', warmTile);
+document.addEventListener('focusin', warmTile);
 
 document.addEventListener('input', (e) => {
   const el = e.target;
@@ -280,19 +353,21 @@ document.addEventListener('keydown', (e) => {
     render();
   } else if (state.productOpen) {
     closeProductOverlay();
-    render();
   } else if (state.reportOpen) {
     state.reportOpen = false;
     render();
   }
 });
 
-window.addEventListener('hashchange', () => {
-  const page = getPageFromHash();
-  // nav clicks already set state.page and rendered before the hash updated
-  if (page === state.page) return;
-  state.page = page;
+window.addEventListener('popstate', () => {
+  applyRoute();
   render();
+});
+
+// Old hash links (#about, #assessment…) still work: map them to clean paths.
+window.addEventListener('hashchange', () => {
+  const legacy = legacyHashPath(location.hash);
+  if (legacy) navigate(legacy, { replace: true });
 });
 
 if (window.matchMedia) {
@@ -305,5 +380,8 @@ if (window.matchMedia) {
   else if (mq.addListener) mq.addListener(onSchemeChange);
 }
 
+const legacyPath = location.pathname === '/' && legacyHashPath(location.hash);
+if (legacyPath) history.replaceState(null, '', legacyPath);
+applyRoute();
 applyTheme();
 render();

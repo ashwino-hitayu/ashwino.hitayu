@@ -37,10 +37,10 @@ export const chevronLeftIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http
 export const chevronRightIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m9.5 6 6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 // The Hitayu peepal emblem — the gold tree/lotus mark cropped from the
-// official logo artwork (public/hitayu-logo.png), background removed.
+// official logo artwork (source: design/hitayu-logo.png), background removed; served as WebP.
 // Reused at hero scale and at report-header scale.
 export function peepalEmblem() {
-  return `<img src="/hitayu-logo.png" alt="Hitayu peepal tree emblem" />`;
+  return `<img src="/hitayu-logo.webp" alt="Hitayu peepal tree emblem" width="320" height="239" />`;
 }
 
 // Plain-language explanations for the dosha info popup — kept separate from

@@ -10,6 +10,10 @@ export function renderProfileForm() {
       <p class="profile-form__eyebrow">Patient Details</p>
       <h2 class="profile-form__heading">Before We Begin</h2>
       <p class="profile-form__sub">A little about you, for a reading that speaks to you by name.</p>
+      <div class="profile-form__note">
+        <p><strong>How to answer:</strong> for each trait, choose what has been true for most of your life — since childhood — not just how you have felt recently.</p>
+        <p>This assessment is designed for adults (16+). For children, please consult the doctor.</p>
+      </div>
       <div class="profile-form__grid">
         <label class="profile-form__field">
           <span>Name</span>
@@ -43,9 +47,9 @@ export function renderWisdomCard(key) {
       <div class="wisdom__card">
         <p class="wisdom__eyebrow">Ayurvedic Verse</p>
         <p class="wisdom__category">${s.category}</p>
-        <p class="wisdom__sanskrit">${s.sanskrit}</p>
-        <p class="wisdom__iast">${s.iast}</p>
-        <p class="wisdom__hindi">${s.hindi}</p>
+        <p class="wisdom__sanskrit" lang="sa">${s.sanskrit}</p>
+        <p class="wisdom__iast" lang="sa-Latn">${s.iast}</p>
+        <p class="wisdom__hindi" lang="hi">${s.hindi}</p>
         <p class="wisdom__english">${s.english}</p>
         <p class="wisdom__source">${s.source}</p>
       </div>
@@ -55,7 +59,7 @@ export function renderWisdomCard(key) {
     <div class="wisdom__card">
       <p class="wisdom__eyebrow">Ayurvedic Teaching</p>
       <p class="wisdom__category">${s.category}</p>
-      <p class="wisdom__hindi">${s.hindi}</p>
+      <p class="wisdom__hindi" lang="hi">${s.hindi}</p>
       <p class="wisdom__english">${s.english}</p>
       ${s.note ? `<p class="wisdom__note">${s.note}</p>` : ''}
       <p class="wisdom__source">${s.source}</p>
@@ -215,6 +219,7 @@ export function renderResult() {
         </div>
       </div>
       <p class="result__disclaimer">A gentle reminder: no dosha is good or bad — every body holds Vata, Pitta and Kapha together. This assessment offers self-understanding for educational purposes and is not a medical diagnosis. For a full Prakriti–Vikriti consultation, visit us at Hitayu.</p>
+      <p class="result__disclaimer result__disclaimer--alert"><strong>Important:</strong> If you have chest pain, breathlessness, high fever, bleeding or sudden weakness, seek emergency medical care. Please don’t stop or change any prescribed medicine based on this assessment.</p>
     </section>
   `;
 }

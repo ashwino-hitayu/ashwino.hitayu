@@ -2,6 +2,7 @@
 // dosha info popup it launches, and the footer.
 import { doshas } from '../doshaData.js';
 import { state, doshaKeys, effectiveTheme } from '../state.js';
+import { pathFor } from '../router.js';
 import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappChatLink, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink } from '../icons.js';
 
 export function renderNav() {
@@ -14,12 +15,12 @@ export function renderNav() {
   return `
     <nav class="site-nav">
       <div class="site-nav__inner">
-        <a class="site-nav__brand" href="#home" data-nav="home" aria-label="Hitayu — Home">${peepalEmblem()}</a>
+        <a class="site-nav__brand" href="/" data-nav="home" aria-label="Hitayu — Home">${peepalEmblem()}</a>
         <div class="site-nav__right">
           <div class="site-nav__links">
             ${links
               .map(
-                (l) => `<a href="#${l.key}" class="site-nav__link ${state.page === l.key ? 'site-nav__link--active' : ''}" data-nav="${l.key}">${l.label}</a>`
+                (l) => `<a href="${pathFor(l.key)}" class="site-nav__link ${state.page === l.key ? 'site-nav__link--active' : ''}" data-nav="${l.key}"${state.page === l.key ? ' aria-current="page"' : ''}>${l.label}</a>`
               )
               .join('')}
           </div>

@@ -72,7 +72,7 @@ export function renderReportOverlay() {
           </ul>
           <p class="report-page__cta-consult">For detailed guidance on the above, please consult<br /><strong>Dr. Hitesh Pant</strong>Hitayu Ayurvedic Clinic &amp; Wellness Center</p>
           <div class="report-page__whatsapp">
-            <img src="/whatsapp-qr.png" alt="Scan to chat with Hitayu on WhatsApp" class="report-page__whatsapp-qr" />
+            <img src="/whatsapp-qr.png" alt="Scan to chat with Hitayu on WhatsApp" class="report-page__whatsapp-qr"${state.page === 'assessment' ? '' : ' loading="lazy"'} />
             <p class="report-page__whatsapp-text">Scan to chat with us on WhatsApp<br /><span>${whatsappLink}</span></p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export function renderReportOverlay() {
         <div class="report-page__footer">
           <p class="report-page__footer-name">Hitayu — Ayurvedic Clinic &amp; Wellness Center</p>
           <p class="report-page__footer-line">Rooted in tradition. Grown for your wellbeing.</p>
-          <p class="report-page__disclaimer">This assessment is intended for educational / self-understanding purposes and does not replace an individual professional Ayurvedic consultation.</p>
+          <p class="report-page__disclaimer">This assessment is intended for educational / self-understanding purposes and does not replace an individual professional Ayurvedic consultation. If you have chest pain, breathlessness, high fever, bleeding or sudden weakness, seek emergency medical care. Please don’t stop or change any prescribed medicine based on this assessment.</p>
         </div>
       </article>
     </div>

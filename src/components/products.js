@@ -28,7 +28,27 @@ function slideKeyframes(count) {
   return `@keyframes product-tile-slide-${count} { ${frames.join(' ')} }`;
 }
 
-export function renderProductTile(product) {
+// Tiles whose hover slideshow has been activated. Until then only the cover
+// photo is fetched: the other slides carry data-src and get their real src on
+// first hover/focus (see warmProductTile) — the browser's own lazy-loading
+// doesn't defer them, since they sit beside the cover rather than below the
+// fold. Touch devices never hover, so they never download those slides.
+const warmTiles = new Set();
+
+export function warmProductTile(tileButton) {
+  const id = tileButton.dataset.productOpen;
+  if (warmTiles.has(id)) return;
+  warmTiles.add(id);
+  tileButton.querySelectorAll('img[data-src]').forEach((img) => {
+    img.src = img.dataset.src;
+    img.removeAttribute('data-src');
+  });
+}
+
+// index = position in the grid: the first row's cover photos load right away
+// (they're on screen); covers further down are lazy-loaded by the browser.
+export function renderProductTile(product, index = 0) {
+  const warm = warmTiles.has(product.id);
   const buyLink = whatsappChatLink(productMessage(product.name));
   const count = product.images.length;
   const slides = count > 1 ? [...product.images, product.images[0]] : product.images;
@@ -39,7 +59,11 @@ export function renderProductTile(product) {
         <span class="product-tile__image-wrap">
           <span class="product-tile__track ${count > 1 ? 'product-tile__track--slides' : ''}"${trackStyle}>
             ${slides
-              .map((src, i) => `<img class="product-tile__image" src="${src}" alt="${i === 0 ? product.name : ''}" ${i === 0 ? '' : 'aria-hidden="true"'} decoding="async" />`)
+              .map((src, i) => {
+                const source = i === 0 || warm ? `src="${src}"` : `data-src="${src}"`;
+                const lazy = i === 0 && index >= 4 ? ' loading="lazy"' : '';
+                return `<img class="product-tile__image" ${source} alt="${i === 0 ? product.name : ''}" ${i === 0 ? '' : 'aria-hidden="true"'} decoding="async"${lazy} />`;
+              })
               .join('')}
           </span>
         </span>
@@ -59,7 +83,7 @@ export function renderProductGrid() {
   return `
     <style>${counts.map(slideKeyframes).join('\n')}</style>
     <div class="product-grid">
-      ${products.map(renderProductTile).join('')}
+      ${products.map((p, i) => renderProductTile(p, i)).join('')}
     </div>
   `;
 }
@@ -87,7 +111,7 @@ export function renderProductOverlay() {
         ${product.images
           .map(
             (src, i) => `<button type="button" class="product-overlay__thumb ${i === index ? 'product-overlay__thumb--active' : ''}" data-product-thumb="${i}" aria-label="Show photo ${i + 1}">
-              <img src="${src}" alt="" />
+              <img src="${src}" alt="" loading="lazy" decoding="async" />
             </button>`
           )
           .join('')}
