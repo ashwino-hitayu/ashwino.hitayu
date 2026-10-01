@@ -2,7 +2,7 @@
 // dosha info popup it launches, and the footer.
 import { doshas } from '../doshaData.js';
 import { state, doshaKeys, effectiveTheme } from '../state.js';
-import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo } from '../icons.js';
+import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappChatLink, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink } from '../icons.js';
 
 export function renderNav() {
   const links = [
@@ -23,9 +23,20 @@ export function renderNav() {
               )
               .join('')}
           </div>
-          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="${isDark ? 'Switch to light mode' : 'Switch to dark mode'}" aria-pressed="${isDark}">
-            ${isDark ? moonIcon : sunIcon}
-          </button>
+          <div class="site-nav__icons">
+            <a href="${instagramLink}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--instagram" aria-label="Follow us on Instagram">
+              ${instagramIcon}
+            </a>
+            <a href="${whatsappChatLink(consultMessage)}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--whatsapp" aria-label="Chat with us on WhatsApp">
+              ${whatsappIcon}
+            </a>
+            <a href="${youtubeLink}" target="_blank" rel="noopener" class="social-nav-link social-nav-link--youtube" aria-label="Watch us on YouTube">
+              ${youtubeIcon}
+            </a>
+            <button type="button" class="theme-toggle" id="theme-toggle" aria-label="${isDark ? 'Switch to light mode' : 'Switch to dark mode'}" aria-pressed="${isDark}">
+              ${isDark ? moonIcon : sunIcon}
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -38,10 +49,10 @@ export function renderDoshaInfoOverlay() {
   const info = doshaSimpleInfo[key];
   return `
     <div class="dosha-info-overlay" id="dosha-info-overlay">
-      <div class="dosha-info-card dosha-info-card--${key}">
+      <div class="dosha-info-card dosha-info-card--${key}" role="dialog" aria-modal="true" aria-labelledby="dosha-info-title">
         <button type="button" class="dosha-info-close" id="dosha-info-close" aria-label="Close">×</button>
         <span class="dosha-info-icon dosha-info-icon--${key}">${doshaIcons[key]}</span>
-        <h3 class="dosha-info-title">${info.title}</h3>
+        <h3 class="dosha-info-title" id="dosha-info-title">${info.title}</h3>
         <p class="dosha-info-text">${info.text}</p>
       </div>
     </div>
@@ -76,6 +87,28 @@ export function renderMasthead(isLanding) {
       </div>
       ${isLanding ? '<p class="masthead__subtitle">An ancient self-portrait, drawn from the three doshas. Answer honestly, reflecting on your life as a whole — not just today.</p>' : ''}
     </header>
+  `;
+}
+
+// WhatsApp / Instagram / YouTube as matching brand-coloured pill buttons —
+// shared by the landing and About pages.
+export function renderSocialButtons(whatsappLabel = 'Chat on WhatsApp') {
+  const buttons = [
+    { href: whatsappChatLink(consultMessage), mod: 'whatsapp', icon: whatsappIcon, label: whatsappLabel },
+    { href: instagramLink, mod: 'instagram', icon: instagramIcon, label: 'Follow on Instagram' },
+    { href: youtubeLink, mod: 'youtube', icon: youtubeIcon, label: 'Watch on YouTube' }
+  ];
+  return `
+    <div class="brand-btn-row">
+      ${buttons
+        .map(
+          (b) => `<a href="${b.href}" target="_blank" rel="noopener" class="brand-btn brand-btn--${b.mod}">
+            <span class="brand-btn__icon" aria-hidden="true">${b.icon}</span>
+            ${b.label}
+          </a>`
+        )
+        .join('')}
+    </div>
   `;
 }
 

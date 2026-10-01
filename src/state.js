@@ -1,6 +1,6 @@
 // App state: persistence (localStorage), routing, and the derived
 // calculations (totals/percents/verdict) everything else reads from.
-import { totalQuestions, doshas } from './doshaData.js';
+import { totalQuestions, doshas, sections } from './doshaData.js';
 
 export const doshaKeys = ['vata', 'pitta', 'kapha'];
 
@@ -53,10 +53,21 @@ export function effectiveTheme() {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+const validRowIds = new Set(sections.flatMap((s) => s.rows.map((r) => r.id)));
+
+// Drops anything that isn't a current row id mapped to a dosha — e.g. answers
+// saved against a row id that has since been renamed/removed, which would
+// otherwise still count toward the totals and the "answered" progress.
 function loadAnswers() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const answers = {};
+    if (parsed && typeof parsed === 'object') {
+      Object.entries(parsed).forEach(([id, d]) => {
+        if (validRowIds.has(id) && doshaKeys.includes(d)) answers[id] = d;
+      });
+    }
+    return answers;
   } catch {
     return {};
   }
@@ -71,11 +82,17 @@ export function saveAnswers() {
 }
 
 function loadProfile() {
+  const empty = { name: '', age: '', gender: '' };
   try {
-    const raw = localStorage.getItem(PROFILE_KEY);
-    return raw ? JSON.parse(raw) : { name: '', age: '', gender: '' };
+    const parsed = JSON.parse(localStorage.getItem(PROFILE_KEY));
+    if (!parsed || typeof parsed !== 'object') return empty;
+    return {
+      name: typeof parsed.name === 'string' ? parsed.name : '',
+      age: typeof parsed.age === 'string' ? parsed.age : '',
+      gender: typeof parsed.gender === 'string' ? parsed.gender : ''
+    };
   } catch {
-    return { name: '', age: '', gender: '' };
+    return empty;
   }
 }
 
@@ -94,6 +111,9 @@ export const state = {
   reportOpen: false,
   page: getPageFromHash(),
   doshaInfoOpen: null,
+  productOpen: null,
+  productImageIndex: 0,
+  lightboxOpen: false,
   theme: loadTheme()
 };
 
@@ -114,14 +134,17 @@ export function computeSectionTotals(section) {
   return totals;
 }
 
+// Largest-remainder rounding, so the three whole-number percents always sum
+// to exactly 100 (independent Math.round gives e.g. 33/33/33 = 99).
 export function computePercents(totals) {
   const sum = totals.vata + totals.pitta + totals.kapha;
   if (!sum) return { vata: 0, pitta: 0, kapha: 0 };
-  return {
-    vata: Math.round((totals.vata / sum) * 100),
-    pitta: Math.round((totals.pitta / sum) * 100),
-    kapha: Math.round((totals.kapha / sum) * 100)
-  };
+  const exact = doshaKeys.map((k) => (totals[k] / sum) * 100);
+  const pct = exact.map(Math.floor);
+  let remainder = 100 - pct.reduce((a, b) => a + b, 0);
+  const byFraction = exact.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0]);
+  for (let j = 0; remainder > 0; j++, remainder--) pct[byFraction[j][1]] += 1;
+  return { vata: pct[0], pitta: pct[1], kapha: pct[2] };
 }
 
 const doshaDescriptions = {
@@ -146,6 +169,9 @@ export function computeVerdict() {
     const k = leaders[0];
     verdictName = `Predominantly ${doshas[k].name}`;
     verdictDesc = doshaDescriptions[k];
+  } else if (leaders.length === 3) {
+    verdictName = 'A Tridoshic Constitution: Vata – Pitta – Kapha';
+    verdictDesc = 'Your traits are spread evenly across all three doshas — a balanced combination of Vata, Pitta and Kapha, and entirely natural.';
   } else {
     const names = leaders.map((k) => doshas[k].name).join(' – ');
     verdictName = `A Dual Constitution: ${names}`;

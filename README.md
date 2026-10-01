@@ -33,20 +33,29 @@ anywhere that serves static files.
 
 ## What's inside
 
-- `index.html` — page shell
-- `src/main.js` — renders the assessment, handles selecting an answer per
-  row, and live-computes the Vata / Pitta / Kapha totals
+- `index.html` — page shell (also loads the Google Fonts and applies the saved
+  light/dark theme before first paint)
+- `src/main.js` — renders the app and handles every click/input/key event
+  (delegated from `document`, so handlers are bound once)
+- `src/state.js` — app state, localStorage persistence, hash routing, and the
+  Vata / Pitta / Kapha totals, percents and verdict
+- `src/pages.js` — the Home, Assessment, About and Products pages
+- `src/components/` — nav/masthead/footer (`chrome.js`), the questionnaire
+  (`assessment.js`), the printable A4 report (`report.js`), products
+  (`products.js`)
 - `src/doshaData.js` — all 33 questions across 5 sections (Physical Body,
   Lifestyle & Daily Habits, Communication, Mind & Emotions, Common
-  Imbalances) — same content/scoring structure as the original tool
+  Imbalances) plus the shloka library
+- `src/productsData.js` — the product catalog
 - `src/style.css` — the vintage mud-wall / royal-green / brass visual theme
 
 ## Customizing
 
-- Clinic name, tagline and hero copy: edit the `renderHero()` function in
-  `src/main.js`
+- Clinic name, tagline and hero copy: edit `renderMasthead()` in
+  `src/components/chrome.js`
 - Colors: all defined as CSS variables at the top of `src/style.css`
-  (`--mud-deep`, `--green-deep`, `--brass`, etc.)
 - Questions/wording: edit `src/doshaData.js` — the row `id` values are used
   as answer keys, so if you rename an `id` after someone has already
-  answered, their saved answer for that row will reset
+  answered, their saved answer for that row is dropped
+- Products: add entries to `src/productsData.js` (images go in
+  `public/products/`)

@@ -11,6 +11,31 @@ export const doshaIcons = {
 export const sunIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
 export const moonIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 14.2A8.5 8.5 0 1 1 9.8 4a6.8 6.8 0 0 0 10.2 10.2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
 
+export const whatsappIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.7 8.3c.3-.6.6-.6.9-.6h.4c.2 0 .4 0 .6.4s.6 1.5.7 1.6c.1.1.1.3 0 .5s-.2.3-.3.4-.3.3-.1.6c.2.3.8 1.1 1.6 1.8 1 .9 1.8 1.1 2.1 1.3.3.1.5.1.6-.1.2-.2.6-.7.8-1 .2-.3.4-.2.6-.1l1.5.7c.2.1.4.2.4.3.1.2.1.9-.2 1.4-.4.6-1.4 1-2 1-.5 0-1.3 0-2.1-.5-1.5-.6-2.9-1.8-4-3.3-.6-.9-1-1.7-1.1-2.1-.1-.4-.3-1.2 0-1.8Z" fill="currentColor"/></svg>`;
+export const whatsappLink = 'https://wa.me/message/IG7NATE62RMJB1';
+
+// The clinic's WhatsApp number — digits only, with country code, no "+"
+// (e.g. '919876543210'). Pre-filled messages need it: the wa.me/message/…
+// short link above ignores ?text=. While this is empty, every chat link
+// falls back to the short link (no pre-filled message).
+export const whatsappNumber = '';
+
+export const consultMessage = "Hi, I'm interested in getting a consultation. Could you please help me book one?";
+export const productMessage = (name) => `Hi, I'm interested in ${name}. Could you please share more details?`;
+
+export function whatsappChatLink(message) {
+  return whatsappNumber ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}` : whatsappLink;
+}
+
+export const instagramIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>`;
+export const instagramLink = 'https://www.instagram.com/hitayu_wellness?stkn=cmhlMmsyZGlqMnJ4';
+
+export const youtubeIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.6 2.6 0 0 0-1.8 1.8A27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 9.3v5.4l4.6-2.7L10 9.3Z" fill="currentColor"/></svg>`;
+export const youtubeLink = 'https://www.youtube.com/@healerphoenix';
+
+export const chevronLeftIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 6 8.5 12l6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+export const chevronRightIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m9.5 6 6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 // The Hitayu peepal emblem — the gold tree/lotus mark cropped from the
 // official logo artwork (public/hitayu-logo.png), background removed.
 // Reused at hero scale and at report-header scale.

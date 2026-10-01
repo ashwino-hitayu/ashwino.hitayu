@@ -3,7 +3,7 @@
 // taking the report down with it.
 import { doshas, totalQuestions } from '../doshaData.js';
 import { state, doshaKeys, escapeHtml, computeVerdict, computePercents } from '../state.js';
-import { peepalEmblem } from '../icons.js';
+import { peepalEmblem, whatsappLink } from '../icons.js';
 
 export function renderReportOverlay() {
   const { totals, answered, complete, verdictName, verdictDesc } = computeVerdict();
@@ -13,7 +13,7 @@ export function renderReportOverlay() {
   const dateStr = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return `
-    <div class="report-overlay ${state.reportOpen ? 'report-overlay--open' : ''}" id="report-overlay">
+    <div class="report-overlay ${state.reportOpen ? 'report-overlay--open' : ''}" id="report-overlay" role="dialog" aria-modal="true" aria-labelledby="report-title">
       <div class="report-overlay__toolbar no-print">
         <button type="button" class="btn" id="close-report-btn">Close</button>
         <button type="button" class="btn btn--primary" id="print-report-btn">Print / Save as PDF</button>
@@ -28,7 +28,7 @@ export function renderReportOverlay() {
           <div class="report-page__doctitle">Assessment Date<br />${dateStr}</div>
         </div>
 
-        <h1 class="report-page__title">Prakriti Assessment Report</h1>
+        <h1 class="report-page__title" id="report-title">Prakriti Assessment Report</h1>
 
         <div class="report-page__patient">
           <div><strong>Name</strong>${p.name ? escapeHtml(p.name) : '—'}</div>
@@ -71,6 +71,10 @@ export function renderReportOverlay() {
             <li>Prakriti–Vikriti assessment</li>
           </ul>
           <p class="report-page__cta-consult">For detailed guidance on the above, please consult<br /><strong>Dr. Hitesh Pant</strong>Hitayu Ayurvedic Clinic &amp; Wellness Center</p>
+          <div class="report-page__whatsapp">
+            <img src="/whatsapp-qr.png" alt="Scan to chat with Hitayu on WhatsApp" class="report-page__whatsapp-qr" />
+            <p class="report-page__whatsapp-text">Scan to chat with us on WhatsApp<br /><span>${whatsappLink}</span></p>
+          </div>
         </div>
 
         <div class="report-page__footer">

@@ -1,8 +1,10 @@
 // Thin page assemblers + the router that picks one based on state.page.
 import { sections, shlokaLibrary } from './doshaData.js';
 import { state } from './state.js';
-import { renderMasthead } from './components/chrome.js';
+import { renderMasthead, renderSocialButtons } from './components/chrome.js';
 import { renderWisdomGroup, renderProfileForm, renderSection, renderScorePanel, renderResult } from './components/assessment.js';
+import { products } from './productsData.js';
+import { renderProductGrid } from './components/products.js';
 
 // Picked once per page load/refresh — a different verse greets the reader each time.
 const shlokaKeys = Object.keys(shlokaLibrary);
@@ -24,6 +26,10 @@ function renderHomePage() {
           <a href="#assessment" data-nav="assessment" class="btn btn--primary landing-choice__btn">Prakriti</a>
           <p class="landing-choice__caption">Know Your Constitution</p>
         </div>
+      </section>
+      <section class="whatsapp-cta">
+        <p class="whatsapp-cta__text">Prefer to talk to us directly?</p>
+        ${renderSocialButtons('Chat with us on WhatsApp')}
       </section>
     </main>
   `;
@@ -65,19 +71,38 @@ function renderAboutPage() {
           <p><strong>Registration:</strong> UK 4778 (Bhartiya Chikitsa Parishad, Uttarakhand)</p>
           <p><strong>Languages Spoken:</strong> Hindi, English, Kannada, Pahadi</p>
         </div>
+        <div class="about-card__contact">
+          ${renderSocialButtons()}
+          <div class="about-card__qr">
+            <img src="/whatsapp-qr.png" alt="WhatsApp QR code — scan to chat with Hitayu" width="395" height="395" />
+            <p>Or scan to chat on WhatsApp</p>
+          </div>
+        </div>
       </section>
     </main>
   `;
 }
 
 function renderProductsPage() {
+  if (products.length === 0) {
+    return `
+      <main class="content">
+        <section class="empty-state">
+          <p class="empty-state__eyebrow">Products</p>
+          <h2 class="empty-state__title">Coming Soon</h2>
+          <p class="empty-state__text">We're preparing a curated range of Ayurvedic products. Please check back soon.</p>
+        </section>
+      </main>
+    `;
+  }
   return `
     <main class="content">
-      <section class="empty-state">
-        <p class="empty-state__eyebrow">Products</p>
-        <h2 class="empty-state__title">Coming Soon</h2>
-        <p class="empty-state__text">We're preparing a curated range of Ayurvedic products. Please check back soon.</p>
+      <section class="products-intro">
+        <p class="products-intro__eyebrow">Products</p>
+        <h2 class="products-intro__title">From The House of Hitayu</h2>
+        <p class="products-intro__hint">Tap an item to view details</p>
       </section>
+      ${renderProductGrid()}
     </main>
   `;
 }

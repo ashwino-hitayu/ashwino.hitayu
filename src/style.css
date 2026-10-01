@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+Devanagari:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
-
 :root {
   /* -------- Deep Forest Green -------- */
   --forest-deep: #12281b;
@@ -50,6 +48,11 @@
   --pitta-label: var(--pitta);
   --kapha-label: var(--kapha-ink);
   --option-hover-bg: #fffaf0;
+  /* prev/next arrows floating over product photos */
+  --gallery-nav-bg: rgba(255, 255, 255, 0.88);
+  --gallery-nav-bg-hover: #ffffff;
+  --gallery-nav-fg: #241c10;
+  --gallery-nav-border: rgba(58, 45, 20, 0.12);
   /* Light text for surfaces that are always dark forest-green, in both
      themes (masthead, score panel, primary buttons) — never overridden
      below, unlike --ivory-warm which doubles as a card background. */
@@ -104,6 +107,10 @@
     --pitta-label: #e8926a;
     --kapha-label: #f0ece0;
     --option-hover-bg: #2a251a;
+    --gallery-nav-bg: rgba(21, 19, 13, 0.78);
+    --gallery-nav-bg-hover: rgba(42, 35, 23, 0.95);
+    --gallery-nav-fg: #efd9a2;
+    --gallery-nav-border: rgba(230, 200, 140, 0.3);
     --nav-bg: rgba(21, 19, 13, 0.9);
     --texture-opacity: 0.35;
     --texture-blend: soft-light;
@@ -133,6 +140,10 @@
   --pitta-label: #e8926a;
   --kapha-label: #f0ece0;
   --option-hover-bg: #2a251a;
+  --gallery-nav-bg: rgba(21, 19, 13, 0.78);
+  --gallery-nav-bg-hover: rgba(42, 35, 23, 0.95);
+  --gallery-nav-fg: #efd9a2;
+  --gallery-nav-border: rgba(230, 200, 140, 0.3);
   --nav-bg: rgba(21, 19, 13, 0.9);
   --texture-opacity: 0.35;
   --texture-blend: soft-light;
@@ -194,7 +205,7 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .option, .pot__fill, .result__bar-fill, .score-panel__bar-fill, .chapter__toggle {
+  .option, .score-panel__bar-fill, .chapter__toggle {
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease, height 0.4s ease, width 0.4s ease;
   }
 }
@@ -245,6 +256,7 @@ body {
 .site-nav__brand img { height: 100%; width: auto; display: block; }
 .site-nav__right { display: flex; align-items: center; gap: 10px; }
 .site-nav__links { display: flex; gap: 6px; }
+.site-nav__icons { display: flex; align-items: center; gap: 10px; }
 .site-nav__link {
   font-family: 'Marcellus', serif;
   font-size: 13px;
@@ -275,12 +287,38 @@ body {
 .theme-toggle:hover { background: rgba(179, 135, 63, 0.1); border-color: var(--gold); color: var(--heading); }
 .theme-toggle:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
 
+.social-nav-link {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: transparent;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.social-nav-link svg { width: 18px; height: 18px; }
+.social-nav-link:hover { background: rgba(179, 135, 63, 0.1); border-color: var(--gold); color: var(--heading); }
+.social-nav-link--whatsapp:hover { background: rgba(37, 211, 102, 0.12); border-color: #25d366; color: #25d366; }
+.social-nav-link--instagram:hover { background: rgba(214, 41, 118, 0.1); border-color: #d62976; color: #d62976; }
+.social-nav-link--youtube:hover { background: rgba(255, 0, 0, 0.1); border-color: #ff0000; color: #ff0000; }
+.social-nav-link:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+@media (max-width: 480px) {
+  .social-nav-link { width: 30px; height: 30px; }
+  .social-nav-link svg { width: 15px; height: 15px; }
+}
+
 @media (max-width: 480px) {
   .site-nav__inner { height: auto; min-height: 54px; padding: 8px 12px; flex-wrap: wrap; gap: 8px; row-gap: 6px; }
   .site-nav__brand { height: 32px; }
-  .site-nav__right { gap: 6px; }
-  .site-nav__links { gap: 2px; }
-  .site-nav__link { padding: 7px 10px; font-size: 12px; }
+  /* two rows: logo + icons on top, page links underneath */
+  .site-nav__right { display: contents; }
+  .site-nav__icons { gap: 6px; margin-left: auto; }
+  .site-nav__links { order: 1; width: 100%; justify-content: center; gap: 2px; }
+  .site-nav__link { padding: 7px 12px; font-size: 12px; white-space: nowrap; }
   .theme-toggle { width: 30px; height: 30px; }
   .theme-toggle svg { width: 15px; height: 15px; }
 }
@@ -1008,6 +1046,56 @@ body {
   margin: 0;
 }
 
+.whatsapp-cta {
+  text-align: center;
+  margin: 0 0 34px;
+}
+.whatsapp-cta__text {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  margin: 0 0 12px;
+}
+.brand-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 14px;
+}
+/* Pill buttons in each platform's own colours (WhatsApp green, Instagram
+   gradient, YouTube red) — white text/icon on all three. */
+.brand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.brand-btn:hover { filter: brightness(0.94); transform: translateY(-1px); }
+.brand-btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+.brand-btn--instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  box-shadow: 0 6px 16px rgba(220, 39, 67, 0.28);
+}
+.brand-btn--youtube {
+  background: #ff0000;
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.25);
+}
+.brand-btn__icon { width: 18px; height: 18px; display: inline-flex; }
+.brand-btn__icon svg { width: 100%; height: 100%; }
+@media (max-width: 480px) {
+  .brand-btn-row { flex-direction: column; align-items: center; }
+  .brand-btn { min-width: 240px; }
+}
+
 .result__disclaimer {
   max-width: 640px;
   margin: 26px auto 0;
@@ -1107,6 +1195,39 @@ body {
 .about-card__meta p { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .about-card__meta strong { color: var(--heading); }
 
+.about-card__contact {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--paper-line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.about-card__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+/* white padding = the QR "quiet zone" scanners need (the source image is
+   cropped tight), and keeps it scannable on the dark theme too */
+.about-card__qr img {
+  width: 150px;
+  height: auto;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--paper-line);
+  box-shadow: var(--shadow-card);
+}
+.about-card__qr p {
+  margin: 0;
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
 /* ==================== Products / empty state ==================== */
 .empty-state {
   margin: 60px auto;
@@ -1139,6 +1260,313 @@ body {
   line-height: 1.7;
   margin: 0;
 }
+
+/* ==================== Products ==================== */
+.products-intro {
+  text-align: center;
+  margin: 30px 0 28px;
+}
+.products-intro__eyebrow {
+  font-family: 'Marcellus', serif;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 0 0 8px;
+}
+.products-intro__title {
+  font-family: 'Cormorant Garamond', 'Marcellus', serif;
+  font-weight: 600;
+  font-size: clamp(24px, 4vw, 32px);
+  color: var(--heading);
+  margin: 0 0 6px;
+}
+.products-intro__hint {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+/* Compact, Myntra/Amazon-style listing — a grid of tappable tiles; the
+   full description/benefits/buy button live in the quick-view popup
+   (see .product-overlay) that opening a tile reveals. */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 40px;
+}
+/* at most 4 per row: 2 on phones, 3 on tablets, 4 on desktop */
+@media (min-width: 640px) {
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+}
+@media (min-width: 960px) {
+  .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+  .product-tile__name { font-size: 15.5px; }
+  .product-tile__tagline { font-size: 12.5px; }
+  .product-tile__buy { font-size: 13px; padding: 10px 14px; }
+}
+.product-tile {
+  background: var(--ivory-warm);
+  border: 1px solid var(--paper-line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+
+.product-tile__open {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-family: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+}
+.product-tile__open:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: -2px; }
+
+.product-tile__image-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--parchment);
+}
+.product-tile__track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.product-tile__image {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* While hovered/focused, the photo strip slides left one photo at a time on
+   a loop (per-photo-count keyframes are generated in components/products.js;
+   the strip ends with a copy of the first photo so the loop is seamless).
+   The negative delay trims the first rest so motion starts sooner. Letting
+   go removes the animation, which resets the strip to the first photo. */
+.product-tile__open:hover .product-tile__track--slides,
+.product-tile__open:focus-visible .product-tile__track--slides {
+  animation: var(--slide-name) var(--slide-duration) ease-in-out -1s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-tile__open:hover .product-tile__track--slides,
+  .product-tile__open:focus-visible .product-tile__track--slides { animation: none; }
+}
+
+.product-tile__name,
+.product-tile__tagline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.product-tile__name {
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--heading);
+  margin: 12px 14px 3px;
+}
+.product-tile__tagline {
+  font-size: 11.5px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0 14px 14px;
+}
+
+.product-tile__buy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: auto 14px 14px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #fff;
+  font-family: 'Marcellus', serif;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.product-tile__buy:hover { background: #20bd5a; }
+.product-tile__buy:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.product-tile__buy .brand-btn__icon { width: 15px; height: 15px; }
+
+/* Quick-view popup — same show/hide mechanic as .dosha-info-overlay */
+.product-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(18, 40, 27, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+.product-overlay__card {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--ivory-warm);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+}
+.product-overlay__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: var(--ivory);
+  color: var(--ink-soft);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+.product-overlay__close:hover { background: rgba(179, 135, 63, 0.12); }
+.product-overlay__gallery {
+  position: relative;
+  background: var(--parchment);
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+}
+.product-overlay__image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  cursor: zoom-in;
+}
+.product-overlay__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--gallery-nav-border);
+  background: var(--gallery-nav-bg);
+  color: var(--gallery-nav-fg);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+}
+.product-overlay__nav svg { width: 18px; height: 18px; }
+.product-overlay__nav:hover { background: var(--gallery-nav-bg-hover); }
+.product-overlay__nav:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.product-overlay__nav--prev { left: 10px; }
+.product-overlay__nav--next { right: 10px; }
+.product-overlay__thumbs {
+  display: flex;
+  gap: 8px;
+  padding: 12px 26px 0;
+}
+.product-overlay__thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.product-overlay__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-overlay__thumb:hover { opacity: 0.85; }
+.product-overlay__thumb--active { border-color: var(--gold); opacity: 1; }
+.product-overlay__body { padding: 20px 26px 28px; }
+.product-overlay__name {
+  font-family: 'Cormorant Garamond', 'Marcellus', serif;
+  font-weight: 600;
+  font-size: 26px;
+  color: var(--heading);
+  margin: 0 0 4px;
+}
+.product-overlay__tagline {
+  font-family: 'Marcellus', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-deep);
+  margin: 0 0 14px;
+}
+.product-overlay__description {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+.product-overlay__benefits {
+  margin: 0 0 22px;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+.product-overlay__benefits li::marker { color: var(--gold-deep); }
+
+/* Full-size lightbox — source photos vary wildly in size/aspect ratio, so
+   this shows each one uncropped (object-fit: contain) rather than the
+   fixed-ratio crop used in the tile/gallery. Sits above the product
+   popup (higher z-index) since it opens from within it. */
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(10, 10, 8, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  cursor: zoom-out;
+}
+.image-lightbox__image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.image-lightbox__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.image-lightbox__close:hover { background: rgba(255, 255, 255, 0.2); }
 
 /* ==================== Dosha info popup ==================== */
 .dosha-info-overlay {
@@ -1378,6 +1806,32 @@ body {
   font-size: 15px;
   color: var(--gold-pale);
   margin-bottom: 2px;
+}
+
+.report-page__whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(217, 181, 110, 0.3);
+}
+.report-page__whatsapp-qr {
+  width: 54px;
+  height: 54px;
+  border-radius: 6px;
+  background: #fff;
+  padding: 3px;
+}
+.report-page__whatsapp-text {
+  margin: 0;
+  font-size: 11px;
+  text-align: left;
+  color: rgba(250, 246, 234, 0.85);
+}
+.report-page__whatsapp-text span {
+  color: var(--gold-pale);
 }
 
 .report-page__footer {
