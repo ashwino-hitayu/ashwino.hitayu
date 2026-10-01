@@ -51,6 +51,7 @@ function applyRoute() {
   }
   if (pageChanged) {
     // popups belong to the page they were opened on
+    state.navMenuOpen = false;
     state.doshaInfoOpen = null;
     state.reportOpen = false;
     state.lightboxOpen = false;
@@ -207,7 +208,13 @@ document.addEventListener('click', (e) => {
   if (!t) return;
   let el;
 
-  if (t.closest('#theme-toggle')) {
+  if (t.closest('#nav-menu-toggle')) {
+    state.navMenuOpen = !state.navMenuOpen;
+    render();
+  } else if (t.id === 'nav-menu-backdrop') {
+    state.navMenuOpen = false;
+    render();
+  } else if (t.closest('#theme-toggle')) {
     state.theme = effectiveTheme() === 'dark' ? 'light' : 'dark';
     saveTheme(state.theme);
     applyTheme();
@@ -216,6 +223,7 @@ document.addEventListener('click', (e) => {
     // let the browser handle new-tab / new-window clicks
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
+    state.navMenuOpen = false;
     navigate(el.getAttribute('href'));
     if (el.hasAttribute('data-resume')) goToNextUnanswered();
   } else if (t.closest('[data-next-unanswered]')) {
@@ -345,7 +353,10 @@ document.addEventListener('keydown', (e) => {
   }
 
   if (e.key !== 'Escape') return;
-  if (state.lightboxOpen) {
+  if (state.navMenuOpen) {
+    state.navMenuOpen = false;
+    render();
+  } else if (state.lightboxOpen) {
     state.lightboxOpen = false;
     render();
   } else if (state.doshaInfoOpen) {

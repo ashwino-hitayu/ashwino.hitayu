@@ -94,6 +94,7 @@ export const state = {
   reportOpen: false,
   page: 'home', // set from the URL by main.js (see router.js)
   doshaInfoOpen: null,
+  navMenuOpen: false, // phone hamburger menu
   productOpen: null,
   productImageIndex: 0,
   lightboxOpen: false,

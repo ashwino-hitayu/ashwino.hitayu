@@ -3,7 +3,7 @@
 import { doshas } from '../doshaData.js';
 import { state, doshaKeys, effectiveTheme } from '../state.js';
 import { pathFor } from '../router.js';
-import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappChatLink, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink } from '../icons.js';
+import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappChatLink, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink, menuIcon, closeIcon, chevronRightIcon } from '../icons.js';
 
 export function renderNav() {
   const links = [
@@ -37,10 +37,48 @@ export function renderNav() {
             <button type="button" class="theme-toggle" id="theme-toggle" aria-label="${isDark ? 'Switch to light mode' : 'Switch to dark mode'}" aria-pressed="${isDark}">
               ${isDark ? moonIcon : sunIcon}
             </button>
+            <button type="button" class="nav-menu-toggle" id="nav-menu-toggle" aria-label="${state.navMenuOpen ? 'Close menu' : 'Open menu'}" aria-expanded="${state.navMenuOpen}" aria-controls="nav-menu">
+              ${state.navMenuOpen ? closeIcon : menuIcon}
+            </button>
           </div>
         </div>
       </div>
+      ${state.navMenuOpen ? renderNavMenu() : ''}
     </nav>
+    ${state.navMenuOpen ? '<div class="nav-menu-backdrop" id="nav-menu-backdrop" aria-hidden="true"></div>' : ''}
+  `;
+}
+
+// Phone menu (≤600px): drops down under the bar. The bar itself keeps the
+// logo, WhatsApp, theme and this menu's toggle; the page links and the
+// Instagram/YouTube icons move in here.
+function renderNavMenu() {
+  const links = [
+    { key: 'home', label: 'Home' },
+    { key: 'about', label: 'About Us' },
+    { key: 'products', label: 'Products' },
+    { key: 'assessment', label: 'Prakriti Assessment' }
+  ];
+  return `
+    <div class="nav-menu" id="nav-menu">
+      <ul class="nav-menu__links">
+        ${links
+          .map(
+            (l) => `<li><a href="${pathFor(l.key)}" class="nav-menu__link ${state.page === l.key ? 'nav-menu__link--active' : ''}" data-nav="${l.key}"${state.page === l.key ? ' aria-current="page"' : ''}>
+              <span>${l.label}</span><span class="nav-menu__chevron" aria-hidden="true">${chevronRightIcon}</span>
+            </a></li>`
+          )
+          .join('')}
+      </ul>
+      <div class="nav-menu__social">
+        <a href="${instagramLink}" target="_blank" rel="noopener" class="nav-menu__social-link nav-menu__social-link--instagram">
+          <span class="nav-menu__social-icon" aria-hidden="true">${instagramIcon}</span>Instagram
+        </a>
+        <a href="${youtubeLink}" target="_blank" rel="noopener" class="nav-menu__social-link nav-menu__social-link--youtube">
+          <span class="nav-menu__social-icon" aria-hidden="true">${youtubeIcon}</span>YouTube
+        </a>
+      </div>
+    </div>
   `;
 }
 

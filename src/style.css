@@ -265,6 +265,7 @@ body {
   text-decoration: none;
   padding: 8px 14px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 .site-nav__link:hover { background: rgba(179, 135, 63, 0.1); color: var(--heading); }
 .site-nav__link--active { background: var(--forest); color: var(--on-forest); }
@@ -306,22 +307,114 @@ body {
 .social-nav-link--instagram:hover { background: rgba(214, 41, 118, 0.1); border-color: #d62976; color: #d62976; }
 .social-nav-link--youtube:hover { background: rgba(255, 0, 0, 0.1); border-color: #ff0000; color: #ff0000; }
 .social-nav-link:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
-@media (max-width: 480px) {
-  .social-nav-link { width: 30px; height: 30px; }
-  .social-nav-link svg { width: 15px; height: 15px; }
-}
+/* ---------- Phone menu ----------
+   The single row (logo, 3 links, 4 icons) needs ~600px. Below that the bar
+   keeps the logo, WhatsApp, theme and a menu button; the page links and the
+   Instagram/YouTube icons move into a card that drops down under the bar. */
+.nav-menu-toggle,
+.nav-menu,
+.nav-menu-backdrop { display: none; }
 
-@media (max-width: 480px) {
-  .site-nav__inner { height: auto; min-height: 54px; padding: 8px 12px; flex-wrap: wrap; gap: 8px; row-gap: 6px; }
-  .site-nav__brand { height: 32px; }
-  /* two rows: logo + icons on top, page links underneath */
-  .site-nav__right { display: contents; }
-  .site-nav__icons { gap: 6px; margin-left: auto; }
-  .site-nav__links { order: 1; width: 100%; justify-content: center; gap: 2px; }
-  .site-nav__link { padding: 7px 12px; font-size: 12px; white-space: nowrap; }
-  .theme-toggle { width: 30px; height: 30px; }
-  .theme-toggle svg { width: 15px; height: 15px; }
+@media (max-width: 600px) {
+  .site-nav__inner { height: 56px; padding: 0 12px; }
+  .site-nav__brand { height: 36px; }
+  .site-nav__links,
+  .social-nav-link--instagram,
+  .social-nav-link--youtube { display: none; }
+  .site-nav__icons { gap: 8px; }
+  .social-nav-link, .theme-toggle, .nav-menu-toggle { width: 36px; height: 36px; }
+  .social-nav-link svg, .theme-toggle svg { width: 17px; height: 17px; }
+
+  .nav-menu-toggle {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--forest);
+    background: var(--forest);
+    color: var(--on-forest);
+    cursor: pointer;
+  }
+  .nav-menu-toggle svg { width: 19px; height: 19px; }
+  .nav-menu-toggle:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+
+  .nav-menu {
+    display: block;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    padding: 8px;
+    border-radius: 16px;
+    border: 1px solid var(--paper-line);
+    background: var(--ivory-warm);
+    box-shadow: var(--shadow-soft);
+  }
+  .nav-menu__links { list-style: none; margin: 0; padding: 0; }
+  .nav-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px;
+    border-radius: 10px;
+    font-family: 'Marcellus', serif;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    color: var(--heading);
+    text-decoration: none;
+  }
+  .nav-menu__link:hover { background: rgba(179, 135, 63, 0.1); }
+  .nav-menu__link:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: -2px; }
+  .nav-menu__link--active { background: var(--forest); color: var(--on-forest); }
+  .nav-menu__link--active:hover { background: var(--forest-mid); }
+  .nav-menu__chevron { display: inline-flex; width: 16px; height: 16px; opacity: 0.6; }
+  .nav-menu__chevron svg { width: 100%; height: 100%; }
+
+  .nav-menu__social {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--paper-line);
+  }
+  .nav-menu__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 999px;
+    border: 1px solid var(--paper-line);
+    font-family: 'Marcellus', serif;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .nav-menu__social-icon { display: inline-flex; width: 17px; height: 17px; }
+  .nav-menu__social-icon svg { width: 100%; height: 100%; }
+  .nav-menu__social-link--instagram .nav-menu__social-icon { color: #d62976; }
+  .nav-menu__social-link--youtube .nav-menu__social-icon { color: #ff0000; }
+  .nav-menu__social-link:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+
+  /* dims the page behind the open menu; tapping it closes the menu */
+  .nav-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(18, 40, 27, 0.35);
+  }
 }
+@media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+  .nav-menu { animation: nav-menu-in 0.18s ease-out; }
+  .nav-menu-backdrop { animation: nav-backdrop-in 0.18s ease-out; }
+}
+@keyframes nav-menu-in { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes nav-backdrop-in { from { opacity: 0; } }
+@media print { .nav-menu, .nav-menu-backdrop { display: none !important; } }
 
 /* ==================== Masthead / Branding ==================== */
 .masthead {
