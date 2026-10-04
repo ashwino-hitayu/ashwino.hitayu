@@ -2,6 +2,31 @@
 // body score panel, the question sections/rows, and the result summary.
 import { doshas, shlokaLibrary, totalQuestions } from '../doshaData.js';
 import { state, doshaKeys, escapeHtml, computeTotals, computeSectionTotals, computePercents, computeVerdict } from '../state.js';
+import { whatsappIcon, whatsappLink } from '../icons.js';
+
+const genderLabels = { female: 'Female', male: 'Male', other: 'Other' };
+
+// The WhatsApp message for "Send My Result to the Doctor". Built at click
+// time (see main.js) since typing a name/age doesn't re-render the page.
+export function resultMessage() {
+  const { totals, verdictName } = computeVerdict();
+  const percents = computePercents(totals);
+  const { name, age, gender } = state.profile;
+  const details = [
+    name.trim() && `Name: ${name.trim()}`,
+    age && `Age: ${age}`,
+    genderLabels[gender] && `Sex: ${genderLabels[gender]}`
+  ].filter(Boolean);
+  return [
+    'Hello Dr. Pant, I have completed the Prakriti assessment on the Hitayu website.',
+    '',
+    ...details,
+    `Result: ${verdictName}`,
+    doshaKeys.map((k) => `${doshas[k].name} ${percents[k]}%`).join(' · '),
+    '',
+    'I would like to book a consultation to discuss my result.'
+  ].join('\n');
+}
 
 export function renderProfileForm() {
   const p = state.profile;
@@ -216,6 +241,14 @@ export function renderResult() {
         <p class="result__eyebrow">${complete ? 'Your Reading Is Complete' : `Reading in progress — ${answered} of ${totalQuestions} traits gathered`}</p>
         <div class="result__actions">
           <button type="button" class="btn btn--primary" id="open-report-btn">View &amp; Print A4 Report</button>
+          ${
+            complete
+              ? `<a href="${whatsappLink}" data-wa-result target="_blank" rel="noopener" class="brand-btn brand-btn--whatsapp">
+            <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
+            Send My Result to the Doctor
+          </a>`
+              : ''
+          }
         </div>
       </div>
       <p class="result__disclaimer">A gentle reminder: no dosha is good or bad — every body holds Vata, Pitta and Kapha together. This assessment offers self-understanding for educational purposes and is not a medical diagnosis. For a full Prakriti–Vikriti consultation, visit us at Hitayu.</p>

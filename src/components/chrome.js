@@ -2,13 +2,14 @@
 // dosha info popup it launches, and the footer.
 import { doshas } from '../doshaData.js';
 import { state, doshaKeys, effectiveTheme } from '../state.js';
-import { pathFor } from '../router.js';
+import { pathFor, SHOW_TREATMENTS } from '../router.js';
 import { doshaIcons, sunIcon, moonIcon, peepalEmblem, doshaSimpleInfo, whatsappIcon, whatsappLinkAttrs, consultMessage, instagramIcon, instagramLink, youtubeIcon, youtubeLink, menuIcon, closeIcon, chevronRightIcon } from '../icons.js';
 
 export function renderNav() {
   const links = [
     { key: 'home', label: 'Home' },
     { key: 'about', label: 'About Us' },
+    ...(SHOW_TREATMENTS ? [{ key: 'treatments', label: 'Treatments' }] : []),
     { key: 'products', label: 'Products' }
   ];
   const isDark = effectiveTheme() === 'dark';
@@ -56,6 +57,7 @@ function renderNavMenu() {
   const links = [
     { key: 'home', label: 'Home' },
     { key: 'about', label: 'About Us' },
+    ...(SHOW_TREATMENTS ? [{ key: 'treatments', label: 'Treatments' }] : []),
     { key: 'products', label: 'Products' },
     { key: 'assessment', label: 'Prakriti Assessment' }
   ];
@@ -82,6 +84,44 @@ function renderNavMenu() {
   `;
 }
 
+// Trial: animated backdrop behind the dosha popup's text — wind gusts for
+// Vata, rising flames and embers for Pitta, earth and water for Kapha. Purely decorative; remove this
+// block, the ${doshaInfoFx[key] || ''} line below and the "Dosha popup
+// backdrops" CSS to drop it.
+const windPaths = [
+  'M-20 40 C60 25 120 55 200 40 S330 25 420 40',
+  'M-20 95 C80 80 150 110 230 92 S350 78 420 95',
+  'M-20 150 C60 138 150 165 230 148 S350 135 420 152',
+  'M-20 205 C70 192 140 218 210 202 S340 190 420 206',
+  'M-20 260 C60 248 150 272 230 258 S350 246 420 262',
+  'M-20 120 C90 108 160 132 240 118 S360 106 420 121'
+];
+const flames = [8, 18, 28, 38, 48, 58, 68, 78, 88, 13, 43, 73];
+const embers = [15, 30, 45, 55, 65, 80, 25, 70];
+// one wave period = 200 units, so sliding the 800-wide strip by half loops seamlessly
+const wavePath = `M0 30 ${Array.from({ length: 8 }, (_, i) => (i === 0 ? 'Q50 18 100 30' : `T${(i + 1) * 100} 30`)).join(' ')} V60 H0 Z`;
+const doshaInfoFx = {
+  vata: `
+    <svg class="dosha-fx dosha-fx--vata" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+      ${windPaths.map((d, i) => `<path d="${d}" pathLength="100" style="--i:${i}" />`).join('')}
+    </svg>`,
+  pitta: `
+    <div class="dosha-fx dosha-fx--pitta" aria-hidden="true">
+      ${flames.map((x, i) => `<span class="flame" style="--x:${x}%;--i:${i}"></span>`).join('')}
+      ${embers.map((x, i) => `<span class="ember" style="--x:${x}%;--i:${i}"></span>`).join('')}
+    </div>`,
+  kapha: `
+    <div class="dosha-fx dosha-fx--kapha" aria-hidden="true">
+      <svg class="kapha-water kapha-water--back" viewBox="0 0 800 60" preserveAspectRatio="none"><path d="${wavePath}" /></svg>
+      <svg class="kapha-water kapha-water--front" viewBox="0 0 800 60" preserveAspectRatio="none"><path d="${wavePath}" /></svg>
+      ${[22, 52, 78].map((x, i) => `<span class="ripple" style="--x:${x}%;--i:${i}"></span>`).join('')}
+      <svg class="kapha-earth" viewBox="0 0 400 60" preserveAspectRatio="none">
+        <path class="kapha-earth__back" d="M0 34 C60 14 120 18 180 30 S300 10 400 26 V60 H0 Z" />
+        <path class="kapha-earth__front" d="M0 46 C70 30 140 50 210 40 S330 28 400 44 V60 H0 Z" />
+      </svg>
+    </div>`
+};
+
 export function renderDoshaInfoOverlay() {
   const key = state.doshaInfoOpen;
   if (!key) return '';
@@ -89,6 +129,7 @@ export function renderDoshaInfoOverlay() {
   return `
     <div class="dosha-info-overlay" id="dosha-info-overlay">
       <div class="dosha-info-card dosha-info-card--${key}" role="dialog" aria-modal="true" aria-labelledby="dosha-info-title">
+        ${doshaInfoFx[key] || ''}
         <button type="button" class="dosha-info-close" id="dosha-info-close" aria-label="Close">×</button>
         <span class="dosha-info-icon dosha-info-icon--${key}">${doshaIcons[key]}</span>
         <h3 class="dosha-info-title" id="dosha-info-title">${info.title}</h3>
@@ -111,7 +152,7 @@ export function renderMasthead(isLanding) {
       <div class="masthead__rule" aria-hidden="true"></div>
       <h1 class="masthead__title">${isLanding ? 'Understand Yourself Through Ayurveda' : 'Prakriti Assessment'}</h1>
       ${isLanding ? '' : '<p class="masthead__know">Know Your Prakriti</p>'}
-      <p class="masthead__tag">Dosha Questionnaire</p>
+      ${isLanding ? '' : '<p class="masthead__tag">Dosha Questionnaire</p>'}
       <div class="masthead__doshas">
         ${doshaKeys
           .map(

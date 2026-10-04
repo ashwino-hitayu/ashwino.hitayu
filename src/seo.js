@@ -35,6 +35,12 @@ export function metaForPath(pathname) {
         description: 'Dr. Hitesh Pant — B.A.M.S. Ayurvedic physician treating chronic conditions, pain (Agnikarma, Viddhakarma), gut health and Marma therapy through classical Ayurveda.',
         image: DEFAULT_IMAGE
       };
+    case 'treatments':
+      return {
+        title: 'Ayurvedic Treatments — Kati Basti, Nasya, Viddhakarma & more · Hitayu',
+        description: 'Classical Ayurvedic therapies at Hitayu: Kati, Janu and Hriday Basti, Nasya, Raktamokshan, Viddhakarma, Basti, Snehan & Swedan — planned after consultation.',
+        image: DEFAULT_IMAGE
+      };
     case 'products':
       return {
         title: 'Ayurvedic Products · Hitayu',

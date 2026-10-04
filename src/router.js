@@ -2,13 +2,19 @@
 //   /                home
 //   /assessment      Prakriti assessment
 //   /about           about the doctor
+//   /treatments      Ayurvedic therapies offered (only while SHOW_TREATMENTS)
 //   /products        product listing
 //   /products/:id    listing with that product's popup open — shareable
 // Anything else renders the not-found page. Pure functions only (no DOM), so
 // vite.config.js can reuse them to emit a static HTML file per route.
 import { products } from './productsData.js';
 
-export const PAGES = ['home', 'assessment', 'about', 'products'];
+// The Treatments page is built but hidden until the clinic's photos are ready:
+// while false it's left out of the nav, the sitemap and the pre-rendered
+// pages, and /treatments shows the not-found page. Flip to true to publish.
+export const SHOW_TREATMENTS = false;
+
+export const PAGES = ['home', 'assessment', 'about', ...(SHOW_TREATMENTS ? ['treatments'] : []), 'products'];
 
 export function pathFor(page, productId = null) {
   if (page === 'products' && productId) return `/products/${encodeURIComponent(productId)}`;

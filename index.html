@@ -23,9 +23,15 @@
     __JSONLD__
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Only the faces the site actually renders (audited); browsers map the
-         CSS weights onto these, e.g. Lora 700 -> 600, Devanagari 400 -> 500. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Cormorant+Garamond:wght@600&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;family=Noto+Serif+Devanagari:wght@500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap" />
+    <!-- Marcellus (headings), Lora (body), Noto Serif Devanagari
+         (Sanskrit/Hindi); Cormorant Garamond and Cinzel only for the hero
+         masthead's title and clinic name. Only the faces the site actually
+         renders; browsers map the CSS weights onto these, e.g. Lora 700 -> 600. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Cormorant+Garamond:wght@600&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;family=Noto+Serif+Devanagari:wght@500;600;700&amp;family=Cinzel:wght@600&amp;display=swap" />
+    <!-- Kalam is only used for the "Crafted by a Vaidya" line on Products, so
+         it's fetched trimmed to just those letters (a few KB) — update the
+         text= list below if that wording changes. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam&amp;text=CraftedbyaVidy%20&amp;display=swap" />
     <script>
       (function () {
         try {

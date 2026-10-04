@@ -14,6 +14,12 @@ const SLIDE_MOVE = 0.8;
 
 const pct = (n) => `${Number(n.toFixed(3))}%`;
 
+// "₹450 · 30 ml", or whichever half is filled in; '' when neither is.
+function priceLine(product, className) {
+  const parts = [product.price, product.size].filter(Boolean);
+  return parts.length ? `<span class="${className}">${parts.join(' · ')}</span>` : '';
+}
+
 // One keyframe set per photo count: hold on photo i, then slide one frame
 // left. The track carries a copy of photo 0 at the end, so the final slide
 // lands on an identical frame and the loop restarts without a jump back.
@@ -69,6 +75,7 @@ export function renderProductTile(product, index = 0) {
         </span>
         <span class="product-tile__name">${product.name}</span>
         <span class="product-tile__tagline" title="${product.tagline}">${product.tagline}</span>
+        ${priceLine(product, 'product-tile__price')}
       </button>
       <a ${buyLink} target="_blank" rel="noopener" class="product-tile__buy">
         <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
@@ -131,6 +138,7 @@ export function renderProductOverlay() {
         <div class="product-overlay__body">
           <h3 class="product-overlay__name" id="product-overlay-name">${product.name}</h3>
           <p class="product-overlay__tagline">${product.tagline}</p>
+          ${priceLine(product, 'product-overlay__price')}
           <p class="product-overlay__description">${product.description}</p>
           <ul class="product-overlay__benefits">
             ${product.benefits.map((b) => `<li>${b}</li>`).join('')}

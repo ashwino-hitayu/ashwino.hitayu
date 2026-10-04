@@ -307,8 +307,17 @@ body {
 .social-nav-link--instagram:hover { background: rgba(214, 41, 118, 0.1); border-color: #d62976; color: #d62976; }
 .social-nav-link--youtube:hover { background: rgba(255, 0, 0, 0.1); border-color: #ff0000; color: #ff0000; }
 .social-nav-link:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+/* just above the phone breakpoint, 4 links + 4 icons only fit with tighter
+   spacing (applies only when a 4th link is shown, e.g. Treatments) */
+@media (min-width: 601px) and (max-width: 760px) {
+  .site-nav:has(.site-nav__link:nth-child(4)) .site-nav__inner { padding: 0 12px; }
+  .site-nav:has(.site-nav__link:nth-child(4)) :is(.site-nav__right, .site-nav__icons) { gap: 6px; }
+  .site-nav:has(.site-nav__link:nth-child(4)) .site-nav__links { gap: 2px; }
+  .site-nav:has(.site-nav__link:nth-child(4)) .site-nav__link { padding: 8px 9px; }
+}
 /* ---------- Phone menu ----------
-   The single row (logo, 3 links, 4 icons) needs ~600px. Below that the bar
+   The single row (logo, 4 links, 4 icons) needs ~600px (with the tighter
+   spacing above). Below that the bar
    keeps the logo, WhatsApp, theme and a menu button; the page links and the
    Instagram/YouTube icons move into a card that drops down under the bar. */
 .nav-menu-toggle,
@@ -449,10 +458,11 @@ body {
 }
 
 .masthead__clinic {
-  font-family: 'Playfair Display', 'Marcellus', serif;
-  font-weight: 700;
+  font-family: 'Cinzel', 'Marcellus', serif;
+  font-weight: 600;
   color: var(--gold-pale);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  text-wrap: balance;
   font-size: clamp(20px, 3.6vw, 30px);
   text-transform: uppercase;
   margin: 0 0 6px;
@@ -498,6 +508,9 @@ body {
   text-transform: uppercase;
   margin: 0 0 16px;
 }
+
+/* landing has no "Dosha Questionnaire" line, so keep its gap here instead */
+.masthead__title + .masthead__doshas { margin-top: 16px; }
 
 .masthead__doshas {
   display: flex;
@@ -1145,6 +1158,43 @@ body {
   text-align: center;
   text-decoration: none;
 }
+/* not built yet: muted, inert, with a "Coming soon" tip on hover / tap */
+.landing-choice__btn--soon {
+  position: relative;
+  color: var(--ink-faint);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+.landing-choice__btn--soon:hover { background: transparent; }
+.soon-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--forest);
+  color: var(--on-forest);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.soon-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: var(--forest);
+}
+.landing-choice__btn--soon:hover .soon-tip,
+.landing-choice__btn--soon:focus .soon-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
 .landing-choice__caption {
   font-size: 13px;
   font-style: italic;
@@ -1221,8 +1271,7 @@ body {
   border-top: 1px solid var(--paper-line);
 }
 .site-footer__name {
-  font-family: 'Playfair Display', 'Marcellus', serif;
-  font-weight: 700;
+  font-family: 'Marcellus', serif;
   color: var(--heading);
   font-size: 15px;
   margin: 0 0 4px;
@@ -1260,8 +1309,7 @@ body {
   margin: 0 0 8px;
 }
 .about-card__name {
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: clamp(24px, 4vw, 32px);
   color: var(--heading);
   margin: 0 0 6px;
@@ -1356,8 +1404,7 @@ body {
   margin: 0 0 10px;
 }
 .empty-state__title {
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: clamp(24px, 4vw, 32px);
   color: var(--heading);
   margin: 0 0 12px;
@@ -1461,34 +1508,60 @@ body {
   margin: 0 0 8px;
 }
 .products-intro__title {
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: clamp(24px, 4vw, 32px);
   color: var(--heading);
   margin: 0 0 6px;
 }
 .products-intro__hint {
-  font-size: 12.5px;
-  font-style: italic;
+  font-family: 'Kalam', cursive;
+  font-size: 17px;
   color: var(--ink-faint);
+  line-height: 1.35;
   margin: 0;
 }
+.products-intro__hint span { display: block; }
+/* the circulation note keeps the original small italic body type */
+.products-intro__note {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 12.5px;
+  font-style: italic;
+}
+/* flanked by gold rules that fade away outwards */
+.products-intro__hint .products-intro__note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.products-intro__note::before,
+.products-intro__note::after {
+  content: '';
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.products-intro__note::after { transform: scaleX(-1); }
 
 /* Compact, Myntra/Amazon-style listing — a grid of tappable tiles; the
    full description/benefits/buy button live in the quick-view popup
    (see .product-overlay) that opening a tile reveals. */
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  --cols: 2;
+  --gap: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* a part-filled last row sits centred, not left-aligned */
+  gap: var(--gap);
   margin: 0 0 40px;
 }
+.product-grid > .product-tile { width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); }
 /* at most 4 per row: 2 on phones, 3 on tablets, 4 on desktop */
 @media (min-width: 640px) {
-  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .product-grid { --cols: 3; --gap: 18px; }
 }
 @media (min-width: 960px) {
-  .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+  .product-grid { --cols: 4; --gap: 22px; }
   .product-tile__name { font-size: 15.5px; }
   .product-tile__tagline { font-size: 12.5px; }
   .product-tile__buy { font-size: 13px; padding: 10px 14px; }
@@ -1574,6 +1647,20 @@ body {
   font-style: italic;
   color: var(--ink-faint);
   margin: 0 14px 14px;
+}
+.product-tile__price {
+  display: block;
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  color: var(--gold-ink);
+  margin: -6px 14px 14px;
+}
+.product-overlay__price {
+  display: block;
+  font-family: 'Marcellus', serif;
+  font-size: 17px;
+  color: var(--gold-ink);
+  margin: -6px 0 14px;
 }
 
 .product-tile__buy {
@@ -1689,8 +1776,7 @@ body {
 .product-overlay__thumb--active { border-color: var(--gold); opacity: 1; }
 .product-overlay__body { padding: 20px 26px 28px; }
 .product-overlay__name {
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: 26px;
   color: var(--heading);
   margin: 0 0 4px;
@@ -1754,6 +1840,255 @@ body {
 }
 .image-lightbox__close:hover { background: rgba(255, 255, 255, 0.2); }
 
+/* ==================== Treatments ==================== */
+.treatments-intro__sub {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0;
+}
+/* 1 / 2 / 3 per row; a part-filled last row sits centred */
+.treatment-grid {
+  --cols: 1;
+  --gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+  margin: 0 0 26px;
+}
+.treatment-grid > .treatment-card { width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); }
+@media (min-width: 640px) {
+  .treatment-grid { --cols: 2; --gap: 18px; }
+}
+@media (min-width: 960px) {
+  .treatment-grid { --cols: 3; --gap: 22px; }
+}
+
+/* ---- Flip card ----
+   Both faces share one grid cell, so the card is as tall as its taller face
+   (no fixed height). The inner layer turns 180° in 3D; each face hides its
+   back. Transforms always list translateY + rotateY so hover-lift and flip
+   interpolate smoothly together. */
+.flip-card {
+  display: flex;
+  perspective: 1600px;
+  scroll-margin-top: 90px;
+}
+.flip-card__inner {
+  flex: 1;
+  display: grid;
+  transform-style: preserve-3d;
+  transform: translateY(0) rotateY(0deg);
+  transition: transform 0.8s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+.flip-card.is-flipped .flip-card__inner { transform: translateY(0) rotateY(180deg); }
+@media (hover: hover) {
+  .flip-card:hover .flip-card__inner { transform: translateY(-5px) rotateY(0deg); }
+  .flip-card.is-flipped:hover .flip-card__inner { transform: translateY(-5px) rotateY(180deg); }
+}
+.flip-card__face {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border-top: 3px solid var(--gold);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  box-shadow: var(--shadow-card);
+}
+.flip-card:hover .flip-card__face { box-shadow: var(--shadow-soft); }
+
+/* front: full-bleed photo, name on a dark gradient */
+.flip-card__front {
+  isolation: isolate;
+  justify-content: flex-end;
+  min-height: 380px;
+  padding: 24px 22px 22px;
+  background: var(--forest-deep);
+  color: var(--on-forest);
+}
+.flip-card__image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.flip-card:hover .flip-card__image { transform: scale(1.05); }
+.flip-card__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(10, 22, 14, 0.94) 0%, rgba(10, 22, 14, 0.7) 32%, rgba(10, 22, 14, 0.1) 62%, transparent 80%);
+}
+.flip-card__sanskrit {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--gold-light);
+  margin: 0 0 2px;
+}
+.flip-card__name {
+  font-family: 'Marcellus', serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.15;
+  color: #fbf3df;
+  margin: 0 0 6px;
+}
+.flip-card__tagline {
+  font-size: 13.5px;
+  font-style: italic;
+  color: rgba(251, 243, 223, 0.8);
+  margin: 0 0 16px;
+}
+.flip-card__hint {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 181, 110, 0.6);
+  background: rgba(10, 22, 14, 0.5);
+  color: var(--gold-pale);
+  font-family: 'Marcellus', serif;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+/* the whole photo side is the hit area for the flip button (no filter /
+   backdrop-filter / transform on the button, or this would shrink to it) */
+.flip-card__hint::after { content: ''; position: absolute; inset: 0; }
+.flip-card:hover .flip-card__hint { background: var(--gold-light); color: var(--forest-deep); }
+.flip-card__hint:focus-visible { outline: 2px solid var(--gold-pale); outline-offset: 3px; }
+.flip-card__hint-icon, .flip-card__back-btn svg { width: 15px; height: 15px; display: inline-flex; }
+.flip-card__hint-icon svg { width: 100%; height: 100%; }
+
+/* back: the details */
+.flip-card__back {
+  transform: rotateY(180deg);
+  padding: 22px 22px 20px;
+  background: var(--ivory-warm);
+  border: 1px solid var(--paper-line);
+  border-top: 3px solid var(--gold);
+}
+.flip-card__back-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: var(--ivory);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.flip-card__back-btn:hover { background: rgba(179, 135, 63, 0.12); color: var(--heading); }
+.flip-card__back-btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.flip-card__back-btn svg { transform: scaleX(-1); }
+
+.treatment-card__sanskrit {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--gold-deep);
+  margin: 0 0 2px;
+}
+.treatment-card__name {
+  font-family: 'Marcellus', serif;
+  font-weight: 400;
+  font-size: 21px;
+  color: var(--heading);
+  margin: 0 0 10px;
+}
+.treatment-card__description {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+.treatment-card__uses-label {
+  font-family: 'Marcellus', serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 0 0 8px;
+}
+.treatment-card__uses {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0 0 16px;
+}
+.treatment-card__uses li {
+  font-size: 12px;
+  color: var(--ink-soft);
+  background: rgba(179, 135, 63, 0.1);
+  border: 1px solid rgba(179, 135, 63, 0.22);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.treatment-card__note {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: -6px 0 16px;
+}
+.treatment-card__enquire {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--forest-soft);
+  color: var(--heading);
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.treatment-card__enquire:hover { background: var(--forest); color: var(--on-forest); border-color: var(--forest); }
+.treatment-card__enquire:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+.treatment-card__enquire-icon { width: 16px; height: 16px; display: inline-flex; }
+.treatment-card__enquire-icon svg { width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .flip-card__inner, .flip-card__image { transition: none; }
+}
+.treatments-credits {
+  max-width: 760px;
+  margin: -6px auto 22px;
+  text-align: center;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  opacity: 0.85;
+}
+.treatments-credits a { color: inherit; }
+.treatments-disclaimer {
+  max-width: 640px;
+  margin: 0 auto 30px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}
+
 /* ==================== Dosha info popup ==================== */
 .dosha-info-overlay {
   position: fixed;
@@ -1812,6 +2147,125 @@ body {
   margin: 0;
 }
 
+/* Dosha popup backdrops (trial) — wind for Vata, fire for Pitta, earth and
+   water for Kapha; see
+   doshaInfoFx in chrome.js. isolation + z-index:-1 keeps them above the
+   card's background but beneath its text and close button. */
+.dosha-info-card { isolation: isolate; overflow: hidden; }
+.dosha-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+/* wind: a short dash travels along each curve, like a passing gust */
+.dosha-fx--vata path {
+  fill: none;
+  stroke: var(--vata-label);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.28;
+  stroke-dasharray: 26 130;
+  stroke-dashoffset: 26;
+}
+/* fire: soft blurred flames rising from the bottom edge, plus drifting embers */
+.dosha-fx--pitta {
+  background: linear-gradient(to top, rgba(226, 110, 50, 0.22), transparent 45%);
+}
+.flame {
+  position: absolute;
+  bottom: -30px;
+  left: var(--x);
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 196, 92, 0.85), rgba(232, 96, 36, 0.55) 45%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0;
+}
+.ember {
+  position: absolute;
+  bottom: 10px;
+  left: var(--x);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f39a4a;
+  box-shadow: 0 0 6px 2px rgba(243, 154, 74, 0.6);
+  opacity: 0;
+}
+/* earth & water: a slow wave flowing behind layered hills, ripples on its surface */
+.dosha-info-card--kapha { padding-bottom: 72px; } /* room for the landscape below the text */
+.dosha-fx--kapha {
+  background: linear-gradient(to top, rgba(120, 160, 140, 0.14), transparent 40%);
+}
+.kapha-water {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 34px;
+}
+.kapha-water path { fill: rgba(86, 150, 156, 0.16); }
+.kapha-water--back { bottom: 30px; }
+.kapha-water--front { bottom: 22px; transform: translateX(-25%); }
+.kapha-water--front path { fill: rgba(86, 150, 156, 0.2); }
+.ripple {
+  position: absolute;
+  bottom: 44px;
+  left: var(--x);
+  width: 70px;
+  height: 18px;
+  margin-left: -35px;
+  border: 1.5px solid rgba(86, 150, 156, 0.5);
+  border-radius: 50%;
+  opacity: 0;
+}
+.kapha-earth {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46px;
+}
+.kapha-earth__back { fill: rgba(200, 187, 146, 0.38); }
+.kapha-earth__front { fill: rgba(76, 122, 92, 0.22); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .kapha-water--back { animation: kapha-flow 14s linear infinite; }
+  .kapha-water--front { animation: kapha-flow 9s linear -4s infinite reverse; }
+  .ripple { animation: kapha-ripple 4.5s ease-out calc(var(--i) * -1.5s) infinite; }
+  .dosha-fx--vata path { animation: dosha-gust 3s ease-in-out calc(var(--i) * -1.1s) infinite; }
+  .flame { animation: dosha-flame 2.2s ease-in calc(var(--i) * -0.37s) infinite; }
+  .ember { animation: dosha-ember 3.6s ease-out calc(var(--i) * -0.45s) infinite; }
+}
+@keyframes kapha-flow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes kapha-ripple {
+  0% { transform: scale(0.15); opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+@keyframes dosha-gust {
+  to { stroke-dashoffset: -110; }
+}
+@keyframes dosha-flame {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  15% { opacity: 0.75; }
+  100% { transform: translateY(-150px) scale(0.25); opacity: 0; }
+}
+@keyframes dosha-ember {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 0.9; }
+  50% { transform: translate(12px, -120px); }
+  100% { transform: translate(-8px, -260px); opacity: 0; }
+}
+
 /* ==================== A4 Report Overlay ==================== */
 .report-overlay {
   display: none;
@@ -1868,8 +2322,7 @@ body {
 .report-page__emblem img { width: 100%; height: auto; display: block; }
 .report-page__clinic { flex: 1; }
 .report-page__clinic-name {
-  font-family: 'Playfair Display', 'Marcellus', serif;
-  font-weight: 700;
+  font-family: 'Marcellus', serif;
   font-size: 17px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1893,8 +2346,7 @@ body {
 
 .report-page__title {
   text-align: center;
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: 27px;
   color: var(--heading);
   margin: 6px 0 22px;
@@ -1932,8 +2384,7 @@ body {
 }
 .report-page__result-title {
   text-align: center;
-  font-family: 'Cormorant Garamond', 'Marcellus', serif;
-  font-weight: 600;
+  font-family: 'Marcellus', serif;
   font-size: 26px;
   color: var(--heading);
   margin: 0 0 20px;

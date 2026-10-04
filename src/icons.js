@@ -16,6 +16,7 @@ export const whatsappLink = 'https://wa.me/message/IG7NATE62RMJB1';
 
 export const consultMessage = "Hi, I'm interested in getting a consultation. Could you please help me book one?";
 export const productMessage = (name) => `Hi, I'm interested in ${name}. Could you please share more details?`;
+export const treatmentMessage = (name) => `Hi, I'd like to know more about ${name} therapy. Could you please share details and availability?`;
 
 // Pre-filled messages need the clinic's number (the short link above ignores
 // ?text=), but the number is deliberately never written into the page: links
@@ -50,11 +51,12 @@ export const closeIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www
 export const chevronLeftIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 6 8.5 12l6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 export const chevronRightIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m9.5 6 6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-// The Hitayu peepal emblem — the gold tree/lotus mark cropped from the
-// official logo artwork (source: design/hitayu-logo.png), background removed; served as WebP.
+// The Hitayu peepal emblem — the gold tree/lotus mark cut out of the official
+// logo artwork (design/hitayu-logo-source.jpeg) along its gold edge, so no
+// pale halo shows on dark backgrounds (copy: design/hitayu-logo.png); served as WebP.
 // Reused at hero scale and at report-header scale.
 export function peepalEmblem() {
-  return `<img src="/hitayu-logo.webp" alt="Hitayu peepal tree emblem" width="320" height="239" />`;
+  return `<img src="/hitayu-logo.webp" alt="Hitayu peepal tree emblem" width="450" height="328" />`;
 }
 
 // Plain-language explanations for the dosha info popup — kept separate from

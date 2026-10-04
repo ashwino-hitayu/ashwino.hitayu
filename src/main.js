@@ -9,6 +9,8 @@ import { renderProductOverlay, renderImageLightbox, warmProductTile } from './co
 import { products } from './productsData.js';
 import { whatsappMessageUrl } from './icons.js';
 import { renderPage } from './pages.js';
+import { resultMessage } from './components/assessment.js';
+import { toggleTreatmentFlip } from './components/treatments.js';
 
 const app = document.getElementById('app');
 
@@ -209,10 +211,11 @@ document.addEventListener('click', (e) => {
   if (!t) return;
   let el;
 
-  if ((el = t.closest('a[data-wa-message]')) && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
+  if ((el = t.closest('a[data-wa-message], a[data-wa-result]')) && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
     // build the pre-filled wa.me link only now, so the number never sits in the page
     e.preventDefault();
-    window.open(whatsappMessageUrl(el.dataset.waMessage), '_blank', 'noopener');
+    const message = el.hasAttribute('data-wa-result') ? resultMessage() : el.dataset.waMessage;
+    window.open(whatsappMessageUrl(message), '_blank', 'noopener');
   } else if (t.closest('#nav-menu-toggle')) {
     state.navMenuOpen = !state.navMenuOpen;
     render();
@@ -239,6 +242,8 @@ document.addEventListener('click', (e) => {
   } else if (t.id === 'dosha-info-overlay' || t.closest('#dosha-info-close')) {
     state.doshaInfoOpen = null;
     render();
+  } else if ((el = t.closest('[data-flip]'))) {
+    toggleTreatmentFlip(el);
   } else if ((el = t.closest('[data-product-open]'))) {
     navigate(pathFor('products', el.dataset.productOpen), { historyState: { productPopup: true } });
   } else if (t.id === 'product-overlay' || t.closest('#product-overlay-close')) {
