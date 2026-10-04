@@ -5,6 +5,7 @@ import { renderMasthead, renderSocialButtons } from './components/chrome.js';
 import { renderWisdomGroup, renderProfileForm, renderSection, renderScorePanel, renderResult } from './components/assessment.js';
 import { products } from './productsData.js';
 import { renderProductGrid } from './components/products.js';
+import { renderTreatmentGrid } from './components/treatments.js';
 import { pathFor } from './router.js';
 
 // Picked once per page load/refresh — a different verse greets the reader each time.
@@ -41,7 +42,9 @@ function renderHomePage() {
       ${renderWisdomGroup([randomShlokaKey])}
       <section class="landing-choices">
         <div class="landing-choice">
-          <button type="button" class="btn btn--ghost landing-choice__btn">Agni</button>
+          <button type="button" class="btn btn--ghost landing-choice__btn landing-choice__btn--soon" aria-disabled="true">
+            Agni<span class="soon-tip" role="tooltip">Coming soon</span>
+          </button>
           <p class="landing-choice__caption">Know Your Digestive Fire</p>
         </div>
         <div class="landing-choice">
@@ -130,6 +133,24 @@ function renderAboutPage() {
   `;
 }
 
+function renderTreatmentsPage() {
+  return `
+    <main class="content">
+      <section class="products-intro">
+        <p class="products-intro__eyebrow">Treatments</p>
+        <h2 class="products-intro__title">Classical Ayurvedic Therapies</h2>
+        <p class="treatments-intro__sub">Time-honoured therapies, planned around your constitution and condition.</p>
+      </section>
+      ${renderTreatmentGrid()}
+      <p class="treatments-disclaimer">Every therapy is planned after a consultation, according to your Prakriti, condition and season. Results vary from person to person, and these therapies complement — never replace — emergency or ongoing medical care.</p>
+      <section class="whatsapp-cta">
+        <p class="whatsapp-cta__text">Not sure which therapy suits you?</p>
+        ${renderSocialButtons('Book a Consultation on WhatsApp')}
+      </section>
+    </main>
+  `;
+}
+
 function renderProductsPage() {
   if (products.length === 0) {
     return `
@@ -147,7 +168,7 @@ function renderProductsPage() {
       <section class="products-intro">
         <p class="products-intro__eyebrow">Products</p>
         <h2 class="products-intro__title">From The House of Hitayu</h2>
-        <p class="products-intro__hint">Tap an item to view details</p>
+        <p class="products-intro__hint"><span>Crafted by a Vaidya</span><span class="products-intro__note">Only for private circulation</span></p>
       </section>
       ${renderProductGrid()}
     </main>
@@ -170,6 +191,7 @@ function renderNotFoundPage() {
 export function renderPage() {
   if (state.page === 'assessment') return renderAssessmentPage();
   if (state.page === 'about') return renderAboutPage();
+  if (state.page === 'treatments') return renderTreatmentsPage();
   if (state.page === 'products') return renderProductsPage();
   if (state.page === 'notfound') return renderNotFoundPage();
   return renderHomePage();

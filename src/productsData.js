@@ -1,6 +1,7 @@
 // Product catalog for the Products page. Add future items to this array —
 // the page renders whatever's here, and falls back to an empty state when
-// the list is empty.
+// the list is empty. price / size (e.g. '₹450', '30 ml') are optional and
+// only shown once filled in.
 export const products = [
   {
     id: 'swarna-prashan',
@@ -11,6 +12,8 @@ export const products = [
       '/products/swarna-prashan-1.jpg',
       '/products/swarna-prashan-4.jpg'
     ],
+    price: '',
+    size: '',
     tagline: 'Traditional purity, now in amber glass',
     description:
       'A classical Ayurvedic formulation for children (birth to 16 years), prepared by qualified Vaidyas with Brahmi, Vacha, Shankhpushpi, Jatamansi, honey, clarified butter (ghee) and Swarna Bhasma.',
@@ -26,6 +29,8 @@ export const products = [
       '/products/shatdhaut-ghrit-4.jpeg',
       '/products/shatdhaut-ghrit-5.jpeg'
     ],
+    price: '',
+    size: '',
     tagline: 'Hundred-times-washed ghee, enriched with saffron & rose',
     description:
       'A classical Ayurvedic preparation — cow’s ghee washed a hundred times with water until light and frothy (Shatadhauta Ghrita) — enriched with Keshar (saffron), Yastimadhu (licorice) and Rose. Crafted by a Vaidya from just two base ingredients, free from preservatives and harsh chemicals, gentle enough for a child’s delicate skin.',
@@ -40,6 +45,8 @@ export const products = [
       '/products/ojas-mukh-lepa-3.jpg',
       '/products/ojas-mukh-lepa-4.jpg'
     ],
+    price: '',
+    size: '',
     tagline: 'Sun-dried skin radiance — a traditional Ayurvedic face pack',
     description:
       'A traditional face pack (Mukha Lepa) crafted by a Vaidya from rose petals, Yashtimadhu, Multani Mitti & Gopi Chandan, finely ground Masoor Dal, Neem and Turmeric — 100% plant and clay based, with no preservatives or artificial perfumes. <br> To use: mix 1 teaspoon with rose water, plain water or raw milk into a smooth paste, apply evenly over a clean face (avoiding the eyes), leave for 10–12 minutes until partly dry, then massage gently in upward circles and rinse with cold water.',

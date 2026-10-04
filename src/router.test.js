@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parsePath, pathFor, legacyHashPath, allPaths } from './router.js';
+import { parsePath, pathFor, legacyHashPath, allPaths, SHOW_TREATMENTS } from './router.js';
 import { metaForPath } from './seo.js';
 import { products } from './productsData.js';
 
@@ -10,6 +10,7 @@ describe('router', () => {
     expect(parsePath('/')).toEqual({ page: 'home', productId: null });
     expect(parsePath('/assessment')).toEqual({ page: 'assessment', productId: null });
     expect(parsePath('/about/')).toEqual({ page: 'about', productId: null });
+    expect(parsePath('/treatments').page).toBe(SHOW_TREATMENTS ? 'treatments' : 'notfound');
     expect(parsePath('/products')).toEqual({ page: 'products', productId: null });
     expect(parsePath(`/products/${productId}`)).toEqual({ page: 'products', productId });
   });
@@ -21,7 +22,7 @@ describe('router', () => {
   });
 
   it('round-trips pathFor -> parsePath', () => {
-    for (const page of ['home', 'assessment', 'about', 'products']) expect(parsePath(pathFor(page)).page).toBe(page);
+    for (const page of ['home', 'assessment', 'about', ...(SHOW_TREATMENTS ? ['treatments'] : []), 'products']) expect(parsePath(pathFor(page)).page).toBe(page);
     expect(parsePath(pathFor('products', productId)).productId).toBe(productId);
   });
 
