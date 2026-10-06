@@ -12,7 +12,7 @@ import { products } from './productsData.js';
 // The Treatments page is built but hidden until the clinic's photos are ready:
 // while false it's left out of the nav, the sitemap and the pre-rendered
 // pages, and /treatments shows the not-found page. Flip to true to publish.
-export const SHOW_TREATMENTS = false;
+export const SHOW_TREATMENTS = true;
 
 export const PAGES = ['home', 'assessment', 'about', ...(SHOW_TREATMENTS ? ['treatments'] : []), 'products'];
 

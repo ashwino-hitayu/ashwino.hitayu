@@ -3,20 +3,18 @@
 import { doshas, shlokaLibrary, totalQuestions } from '../doshaData.js';
 import { state, doshaKeys, escapeHtml, computeTotals, computeSectionTotals, computePercents, computeVerdict } from '../state.js';
 import { whatsappIcon, whatsappLink } from '../icons.js';
+import { tr } from '../i18n.js';
 
 const genderLabels = { female: 'Female', male: 'Male', other: 'Other' };
 
 // The WhatsApp message for "Send My Result to the Doctor". Built at click
 // time (see main.js) since typing a name/age doesn't re-render the page.
+// Always English, like the printed report — it's read by the clinic.
 export function resultMessage() {
   const { totals, verdictName } = computeVerdict();
   const percents = computePercents(totals);
   const { name, age, gender } = state.profile;
-  const details = [
-    name.trim() && `Name: ${name.trim()}`,
-    age && `Age: ${age}`,
-    genderLabels[gender] && `Sex: ${genderLabels[gender]}`
-  ].filter(Boolean);
+  const details = [name.trim() && `Name: ${name.trim()}`, age && `Age: ${age}`, genderLabels[gender] && `Sex: ${genderLabels[gender]}`].filter(Boolean);
   return [
     'Hello Dr. Pant, I have completed the Prakriti assessment on the Hitayu website.',
     '',
@@ -32,30 +30,30 @@ export function renderProfileForm() {
   const p = state.profile;
   return `
     <section class="profile-form">
-      <p class="profile-form__eyebrow">Patient Details</p>
-      <h2 class="profile-form__heading">Before We Begin</h2>
-      <p class="profile-form__sub">A little about you, for a reading that speaks to you by name.</p>
+      <p class="profile-form__eyebrow">${tr('Patient Details')}</p>
+      <h2 class="profile-form__heading">${tr('Before We Begin')}</h2>
+      <p class="profile-form__sub">${tr('A little about you, for a reading that speaks to you by name.')}</p>
       <div class="profile-form__note">
-        <p><strong>How to answer:</strong> for each trait, choose what has been true for most of your life — since childhood — not just how you have felt recently.</p>
-        <p>This assessment is designed for adults (16+). For children, please consult the doctor.</p>
+        <p>${tr('<strong>How to answer:</strong> for each trait, choose what has been true for most of your life — since childhood — not just how you have felt recently.')}</p>
+        <p>${tr('This assessment is designed for adults (16+). For children, please consult the doctor.')}</p>
       </div>
       <div class="profile-form__grid">
         <label class="profile-form__field">
-          <span>Name</span>
-          <input type="text" id="profile-name" placeholder="Your name" value="${escapeHtml(p.name)}" autocomplete="name" />
+          <span>${tr('Name')}</span>
+          <input type="text" id="profile-name" placeholder="${tr('Your name')}" value="${escapeHtml(p.name)}" autocomplete="name" />
         </label>
         <label class="profile-form__field">
-          <span>Age</span>
-          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" id="profile-age" placeholder="Your age" value="${escapeHtml(p.age)}" autocomplete="off" />
+          <span>${tr('Age')}</span>
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" id="profile-age" placeholder="${tr('Your age')}" value="${escapeHtml(p.age)}" autocomplete="off" />
         </label>
         <label class="profile-form__field">
-          <span>Sex / Gender</span>
+          <span>${tr('Sex / Gender')}</span>
           <select id="profile-gender">
-            <option value="" ${p.gender === '' ? 'selected' : ''}>Select…</option>
-            <option value="female" ${p.gender === 'female' ? 'selected' : ''}>Female</option>
-            <option value="male" ${p.gender === 'male' ? 'selected' : ''}>Male</option>
-            <option value="other" ${p.gender === 'other' ? 'selected' : ''}>Other</option>
-            <option value="prefer-not-to-say" ${p.gender === 'prefer-not-to-say' ? 'selected' : ''}>Prefer not to say</option>
+            <option value="" ${p.gender === '' ? 'selected' : ''}>${tr('Select…')}</option>
+            <option value="female" ${p.gender === 'female' ? 'selected' : ''}>${tr('Female')}</option>
+            <option value="male" ${p.gender === 'male' ? 'selected' : ''}>${tr('Male')}</option>
+            <option value="other" ${p.gender === 'other' ? 'selected' : ''}>${tr('Other')}</option>
+            <option value="prefer-not-to-say" ${p.gender === 'prefer-not-to-say' ? 'selected' : ''}>${tr('Prefer not to say')}</option>
           </select>
         </label>
       </div>
@@ -70,7 +68,7 @@ export function renderWisdomCard(key) {
   if (s.type === 'verse') {
     return `
       <div class="wisdom__card">
-        <p class="wisdom__eyebrow">Ayurvedic Verse</p>
+        <p class="wisdom__eyebrow">${tr('Ayurvedic Verse')}</p>
         <p class="wisdom__category">${s.category}</p>
         <p class="wisdom__sanskrit" lang="sa">${s.sanskrit}</p>
         <p class="wisdom__iast" lang="sa-Latn">${s.iast}</p>
@@ -82,11 +80,11 @@ export function renderWisdomCard(key) {
   }
   return `
     <div class="wisdom__card">
-      <p class="wisdom__eyebrow">Ayurvedic Teaching</p>
+      <p class="wisdom__eyebrow">${tr('Ayurvedic Teaching')}</p>
       <p class="wisdom__category">${s.category}</p>
       <p class="wisdom__hindi" lang="hi">${s.hindi}</p>
       <p class="wisdom__english">${s.english}</p>
-      ${s.note ? `<p class="wisdom__note">${s.note}</p>` : ''}
+      ${s.note ? `<p class="wisdom__note">${tr(s.note)}</p>` : ''}
       <p class="wisdom__source">${s.source}</p>
     </div>
   `;
@@ -148,7 +146,7 @@ export function renderScorePanel() {
   const answered = Object.keys(state.answers).length;
   return `
     <aside class="score-panel" id="score-panel" aria-live="polite">
-      <p class="score-panel__title">Your Constitution, So Far</p>
+      <p class="score-panel__title">${tr('Your Constitution, So Far')}</p>
       ${renderCombinedFigure(totals)}
       <div class="score-panel__legend">
         ${doshaKeys
@@ -156,15 +154,15 @@ export function renderScorePanel() {
             (k) => `
           <div class="legend-item legend-item--${k}">
             <span class="legend-item__swatch" aria-hidden="true"></span>
-            <span class="legend-item__label">${doshas[k].name}</span>
+            <span class="legend-item__label">${tr(doshas[k].name)}</span>
             <span class="legend-item__count">${totals[k]}</span>
           </div>`
           )
           .join('')}
       </div>
-      <p class="score-panel__progress">${answered} / ${totalQuestions} answered</p>
+      <p class="score-panel__progress">${tr('{answered} / {total} answered', { answered, total: totalQuestions })}</p>
       <div class="score-panel__bar"><div class="score-panel__bar-fill" style="width:${(answered / totalQuestions) * 100}%"></div></div>
-      <button type="button" class="score-panel__reset" id="reset-btn">Begin Anew</button>
+      <button type="button" class="score-panel__reset" id="reset-btn">${tr('Begin Anew')}</button>
     </aside>
   `;
 }
@@ -173,7 +171,7 @@ export function renderRow(row) {
   const selected = state.answers[row.id];
   return `
     <div class="row" data-row="${row.id}">
-      <p class="row__label">${row.label}</p>
+      <p class="row__label">${tr(row.label)}</p>
       <div class="row__options">
         ${doshaKeys
           .map((k) => {
@@ -187,7 +185,7 @@ export function renderRow(row) {
               aria-pressed="${isSelected}"
             >
               <span class="option__mark" aria-hidden="true">${isSelected ? '✓' : ''}</span>
-              <span class="option__text">${row[k]}</span>
+              <span class="option__text">${tr(row[k])}</span>
             </button>`;
           })
           .join('')}
@@ -207,10 +205,10 @@ export function renderSection(section, index) {
         role="button"
         tabindex="0"
         aria-expanded="${!isCollapsed}"
-        aria-label="${isCollapsed ? 'Expand' : 'Collapse'} ${section.title}"
+        aria-label="${tr(isCollapsed ? 'Expand {title}' : 'Collapse {title}', { title: tr(section.title) })}"
       >
         <span class="chapter__number">${String(index + 1).padStart(2, '0')}</span>
-        <h2 class="chapter__title">${section.title}</h2>
+        <h2 class="chapter__title">${tr(section.title)}</h2>
         <div class="chapter__divider" aria-hidden="true"></div>
         <span class="chapter__toggle" aria-hidden="true">
           <span class="chapter__toggle-icon">${isCollapsed ? '+' : '–'}</span>
@@ -218,11 +216,11 @@ export function renderSection(section, index) {
       </div>
       ${
         isCollapsed
-          ? `<p class="chapter__collapsed-hint">${section.rows.length - (totals.vata + totals.pitta + totals.kapha) === 0 ? 'All traits answered' : `${totals.vata + totals.pitta + totals.kapha} / ${section.rows.length} answered`} — tap to expand</p>`
+          ? `<p class="chapter__collapsed-hint">${section.rows.length - (totals.vata + totals.pitta + totals.kapha) === 0 ? tr('All traits answered') : tr('{answered} / {total} answered', { answered: totals.vata + totals.pitta + totals.kapha, total: section.rows.length })} ${tr('— tap to expand')}</p>`
           : `
       <div class="chapter__rows-head">
         <span></span>
-        ${doshaKeys.map((k) => `<span class="chapter__rows-head-item chapter__rows-head-item--${k}">${doshas[k].name}</span>`).join('')}
+        ${doshaKeys.map((k) => `<span class="chapter__rows-head-item chapter__rows-head-item--${k}">${tr(doshas[k].name)}</span>`).join('')}
       </div>
       <div class="chapter__rows">
         ${section.rows.map((row) => renderRow(row)).join('')}
@@ -238,21 +236,21 @@ export function renderResult() {
   return `
     <section class="result">
       <div class="result__panel">
-        <p class="result__eyebrow">${complete ? 'Your Reading Is Complete' : `Reading in progress — ${answered} of ${totalQuestions} traits gathered`}</p>
+        <p class="result__eyebrow">${complete ? tr('Your Reading Is Complete') : tr('Reading in progress — {answered} of {total} traits gathered', { answered, total: totalQuestions })}</p>
         <div class="result__actions">
-          <button type="button" class="btn btn--primary" id="open-report-btn">View &amp; Print A4 Report</button>
+          <button type="button" class="btn btn--primary" id="open-report-btn">${tr('View &amp; Print A4 Report')}</button>
           ${
             complete
               ? `<a href="${whatsappLink}" data-wa-result target="_blank" rel="noopener" class="brand-btn brand-btn--whatsapp">
             <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
-            Send My Result to the Doctor
+            ${tr('Send My Result to the Doctor')}
           </a>`
               : ''
           }
         </div>
       </div>
-      <p class="result__disclaimer">A gentle reminder: no dosha is good or bad — every body holds Vata, Pitta and Kapha together. This assessment offers self-understanding for educational purposes and is not a medical diagnosis. For a full Prakriti–Vikriti consultation, visit us at Hitayu.</p>
-      <p class="result__disclaimer result__disclaimer--alert"><strong>Important:</strong> If you have chest pain, breathlessness, high fever, bleeding or sudden weakness, seek emergency medical care. Please don’t stop or change any prescribed medicine based on this assessment.</p>
+      <p class="result__disclaimer">${tr('A gentle reminder: no dosha is good or bad — every body holds Vata, Pitta and Kapha together. This assessment offers self-understanding for educational purposes and is not a medical diagnosis. For a full Prakriti–Vikriti consultation, visit us at Hitayu.')}</p>
+      <p class="result__disclaimer result__disclaimer--alert">${tr('<strong>Important:</strong> If you have chest pain, breathlessness, high fever, bleeding or sudden weakness, seek emergency medical care. Please don’t stop or change any prescribed medicine based on this assessment.')}</p>
     </section>
   `;
 }

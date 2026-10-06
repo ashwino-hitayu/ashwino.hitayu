@@ -5,6 +5,8 @@
 // which cards are turned so a later full render (e.g. theme toggle) keeps them.
 import { treatments } from '../treatmentsData.js';
 import { whatsappIcon, whatsappLinkAttrs, treatmentMessage } from '../icons.js';
+import { responsiveAttrs, SIZES } from '../images.js';
+import { tr } from '../i18n.js';
 
 const flipped = new Set();
 
@@ -16,28 +18,28 @@ function renderTreatmentCard(t) {
     <article class="treatment-card flip-card ${isFlipped ? 'is-flipped' : ''}" id="${t.id}">
       <div class="flip-card__inner">
         <div class="flip-card__face flip-card__front"${isFlipped ? ' inert' : ''}>
-          ${t.image ? `<img class="flip-card__image" src="${t.image}" alt="" loading="lazy" decoding="async" />` : ''}
+          ${t.image ? `<img class="flip-card__image" src="${t.image}"${responsiveAttrs(t.image, SIZES.treatmentCard)} alt="" loading="lazy" decoding="async" />` : ''}
           <div class="flip-card__shade" aria-hidden="true"></div>
           <p class="flip-card__sanskrit" lang="hi">${t.sanskrit}</p>
           <h3 class="flip-card__name">${t.name}</h3>
-          <p class="flip-card__tagline">${t.tagline}</p>
-          <button type="button" class="flip-card__hint" data-flip aria-label="Show details for ${t.name}">
-            <span class="flip-card__hint-icon" aria-hidden="true">${flipIcon}</span>Tap to explore
+          <p class="flip-card__tagline">${tr(t.tagline)}</p>
+          <button type="button" class="flip-card__hint" data-flip aria-label="${tr('Show details for {name}', { name: t.name })}">
+            <span class="flip-card__hint-icon" aria-hidden="true">${flipIcon}</span>${tr('Tap to explore')}
           </button>
         </div>
         <div class="flip-card__face flip-card__back"${isFlipped ? '' : ' inert'}>
-          <button type="button" class="flip-card__back-btn" data-flip aria-label="Back to ${t.name} photo">${flipIcon}</button>
+          <button type="button" class="flip-card__back-btn" data-flip aria-label="${tr('Back to {name} photo', { name: t.name })}">${flipIcon}</button>
           <p class="treatment-card__sanskrit" lang="hi">${t.sanskrit}</p>
           <h3 class="treatment-card__name">${t.name}</h3>
-          <p class="treatment-card__description">${t.description}</p>
-          <p class="treatment-card__uses-label">Traditionally used for</p>
+          <p class="treatment-card__description">${tr(t.description)}</p>
+          <p class="treatment-card__uses-label">${tr('Traditionally used for')}</p>
           <ul class="treatment-card__uses">
-            ${t.uses.map((u) => `<li>${u}</li>`).join('')}
+            ${t.uses.map((u) => `<li>${tr(u)}</li>`).join('')}
           </ul>
-          ${t.note ? `<p class="treatment-card__note">${t.note}</p>` : ''}
+          ${t.note ? `<p class="treatment-card__note">${tr(t.note)}</p>` : ''}
           <a ${whatsappLinkAttrs(treatmentMessage(t.name))} target="_blank" rel="noopener" class="treatment-card__enquire">
             <span class="treatment-card__enquire-icon" aria-hidden="true">${whatsappIcon}</span>
-            Ask about ${t.name}
+            ${tr('Ask about {name}', { name: t.name })}
           </a>
         </div>
       </div>
@@ -46,13 +48,7 @@ function renderTreatmentCard(t) {
 }
 
 export function renderTreatmentGrid() {
-  const credited = treatments.filter((t) => t.credit);
-  const credits = credited.length
-    ? `<p class="treatments-credits">Photos: ${credited
-        .map((t) => `${t.name} — <a href="${t.credit.url}" target="_blank" rel="noopener">${t.credit.author}</a> (${t.credit.source})`)
-        .join(' · ')}</p>`
-    : '';
-  return `<div class="treatment-grid">${treatments.map(renderTreatmentCard).join('')}</div>${credits}`;
+  return `<div class="card-grid treatment-grid">${treatments.map(renderTreatmentCard).join('')}</div>`;
 }
 
 // Turn a card over from either side's [data-flip] button. The hidden face is

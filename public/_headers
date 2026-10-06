@@ -1,0 +1,21 @@
+# Browser caching rules (read by Netlify and Cloudflare Pages; other hosts ignore this file).
+#
+# /assets/ holds the built CSS, JS and fonts. Their names contain a hash of
+# their content, so a changed file always gets a new name: browsers can keep
+# them for a year without ever showing stale code.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Site-wide images that rarely change: keep a week, then quietly refresh.
+/hitayu-logo.webp
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/whatsapp-qr.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/figure-body-mask-male.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/figure-body-mask-female.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Pages and product/treatment photos keep the host default (re-checked on
+# each visit, answered with a quick "not modified" when unchanged), so edits
+# show up immediately.

@@ -1,0 +1,230 @@
+:root {
+  /* -------- Deep Forest Green -------- */
+  --forest-deep: #12281b;
+  --forest: #1c3d28;
+  --forest-mid: #2b5539;
+  --forest-soft: #4c7a5c;
+
+  /* -------- Ivory / Parchment -------- */
+  --ivory: #faf6ea;
+  --ivory-warm: #fbf3df;
+  --parchment: #f2e8ce;
+  --parchment-deep: #e6d8ae;
+  --paper-line: rgba(58, 45, 20, 0.16);
+
+  /* -------- Ink -------- */
+  --ink: #241c10;
+  --ink-soft: #4a3d26;
+  --ink-faint: #7c6d4d;
+
+  /* -------- Antique Gold -------- */
+  --gold: #b3873f;
+  --gold-light: #d9b56e;
+  --gold-pale: #efd9a2;
+  --gold-deep: #8a5f22;
+  --gold-ink: #6b481a;
+
+  /* -------- Strict Dosha Colour System -------- */
+  --vata: #33628c;
+  --vata-deep: #223f5c;
+  --vata-tint: #e7eff5;
+
+  --pitta: #b5502a;
+  --pitta-deep: #833a1e;
+  --pitta-tint: #fbece2;
+
+  --kapha: #ffffff;
+  --kapha-deep: #c8bb92;
+  --kapha-ink: #2c4a37;
+  --kapha-tint: #fdfcf6;
+
+  /* -------- Semantic (theme-aware) text tones --------
+     Card backgrounds (ivory/parchment) and this text swap together in dark
+     mode; the forest greens themselves stay put since they're already a
+     dark, brand-coloured surface in both themes. */
+  --heading: var(--forest);
+  --heading-soft: var(--forest-soft);
+  --vata-label: var(--vata);
+  --pitta-label: var(--pitta);
+  --kapha-label: var(--kapha-ink);
+  --option-hover-bg: #fffaf0;
+  /* prev/next arrows floating over product photos */
+  --gallery-nav-bg: rgba(255, 255, 255, 0.88);
+  --gallery-nav-bg-hover: #ffffff;
+  --gallery-nav-fg: #241c10;
+  --gallery-nav-border: rgba(58, 45, 20, 0.12);
+  /* Light text for surfaces that are always dark forest-green, in both
+     themes (masthead, score panel, primary buttons) — never overridden
+     below, unlike --ivory-warm which doubles as a card background. */
+  --on-forest: #fbf3df;
+
+  /* -------- Selected-answer tile colours --------
+     Deliberately separate from --vata/--pitta/--kapha above: those feed
+     the medallions, report bars and row labels too, and only the selected
+     tile + the score-panel body should use this exact trio. */
+  --vata-selected: #b2ebf2;
+  --vata-selected-deep: #7fb8c4;
+  --pitta-selected: #ffcc80;
+  --pitta-selected-deep: #e0a050;
+  --kapha-selected: #a5d6a7;
+  --kapha-selected-deep: #6fae72;
+  /* shared dark ink for text/marks on these light pastel fills */
+  --selected-ink: #22201a;
+
+  --radius-tile: 8px;
+  --shadow-soft: 0 10px 26px rgba(20, 14, 4, 0.14);
+  --shadow-card: 0 6px 18px rgba(20, 14, 4, 0.1);
+  --shadow-carved: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+
+  font-family: 'Lora', Georgia, serif;
+  color: var(--ink);
+  color-scheme: light;
+}
+
+/* ==================== Dark mode ====================
+   Same tokens, dark values — everything that reads var(--ivory), var(--ink),
+   etc. repaints automatically. The report page is pinned to its light
+   values below since it represents a printed paper document. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ivory: #15130d;
+    --ivory-warm: #201c14;
+    --parchment: #2a2317;
+    --parchment-deep: #372d1a;
+    --paper-line: rgba(230, 200, 140, 0.16);
+
+    --ink: #f2ead6;
+    --ink-soft: #cfc2a0;
+    --ink-faint: #9c8f6c;
+
+    --gold-deep: #e0b563;
+    --gold-ink: #caa156;
+
+    --heading: #f0e6cf;
+    --heading-soft: #c9b280;
+    --vata-label: #86b6dd;
+    --pitta-label: #e8926a;
+    --kapha-label: #f0ece0;
+    --option-hover-bg: #2a251a;
+    --gallery-nav-bg: rgba(21, 19, 13, 0.78);
+    --gallery-nav-bg-hover: rgba(42, 35, 23, 0.95);
+    --gallery-nav-fg: #efd9a2;
+    --gallery-nav-border: rgba(230, 200, 140, 0.3);
+    --nav-bg: rgba(21, 19, 13, 0.9);
+    --texture-opacity: 0.35;
+    --texture-blend: soft-light;
+
+    --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ivory: #15130d;
+  --ivory-warm: #201c14;
+  --parchment: #2a2317;
+  --parchment-deep: #372d1a;
+  --paper-line: rgba(230, 200, 140, 0.16);
+
+  --ink: #f2ead6;
+  --ink-soft: #cfc2a0;
+  --ink-faint: #9c8f6c;
+
+  --gold-deep: #e0b563;
+  --gold-ink: #caa156;
+
+  --heading: #f0e6cf;
+  --heading-soft: #c9b280;
+  --vata-label: #86b6dd;
+  --pitta-label: #e8926a;
+  --kapha-label: #f0ece0;
+  --option-hover-bg: #2a251a;
+  --gallery-nav-bg: rgba(21, 19, 13, 0.78);
+  --gallery-nav-bg-hover: rgba(42, 35, 23, 0.95);
+  --gallery-nav-fg: #efd9a2;
+  --gallery-nav-border: rgba(230, 200, 140, 0.3);
+  --nav-bg: rgba(21, 19, 13, 0.9);
+  --texture-opacity: 0.35;
+  --texture-blend: soft-light;
+
+  --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* The printed report always renders as paper, regardless of app theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .report-page {
+    --ivory: #faf6ea;
+    --ivory-warm: #fbf3df;
+    --parchment: #f2e8ce;
+    --parchment-deep: #e6d8ae;
+    --paper-line: rgba(58, 45, 20, 0.16);
+    --ink: #241c10;
+    --ink-soft: #4a3d26;
+    --ink-faint: #7c6d4d;
+    --gold-deep: #8a5f22;
+    --gold-ink: #6b481a;
+    --heading: var(--forest);
+    --heading-soft: var(--forest-soft);
+    --vata-label: var(--vata);
+    --pitta-label: var(--pitta);
+    --kapha-label: var(--kapha-ink);
+    color-scheme: light;
+  }
+}
+:root[data-theme="dark"] .report-page {
+  --ivory: #faf6ea;
+  --ivory-warm: #fbf3df;
+  --parchment: #f2e8ce;
+  --parchment-deep: #e6d8ae;
+  --paper-line: rgba(58, 45, 20, 0.16);
+  --ink: #241c10;
+  --ink-soft: #4a3d26;
+  --ink-faint: #7c6d4d;
+  --gold-deep: #8a5f22;
+  --gold-ink: #6b481a;
+  --heading: var(--forest);
+  --heading-soft: var(--forest-soft);
+  --vata-label: var(--vata);
+  --pitta-label: var(--pitta);
+  --kapha-label: var(--kapha-ink);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 15% -5%, rgba(179, 135, 63, 0.08), transparent 45%),
+    radial-gradient(ellipse at 100% 10%, rgba(28, 61, 40, 0.06), transparent 45%),
+    var(--ivory);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .option, .score-panel__bar-fill, .chapter__toggle {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease, height 0.4s ease, width 0.4s ease;
+  }
+}
+
+/* subtle grain overlay for parchment texture */
+.texture-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--texture-opacity, 0.18);
+  mix-blend-mode: var(--texture-blend, multiply);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
+}
+
+.page {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px 90px;
+}

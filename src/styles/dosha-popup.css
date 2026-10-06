@@ -1,0 +1,176 @@
+/* ==================== Dosha info popup ==================== */
+.dosha-info-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(18, 40, 27, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.dosha-info-card {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  background: var(--ivory-warm);
+  border-radius: 16px;
+  padding: 34px 28px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  border-top: 4px solid var(--gold);
+}
+.dosha-info-card--vata { border-top-color: var(--vata); }
+.dosha-info-card--pitta { border-top-color: var(--pitta); }
+.dosha-info-card--kapha { border-top-color: var(--kapha-deep); }
+.dosha-info-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: var(--ivory);
+  color: var(--ink-soft);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.dosha-info-close:hover { background: rgba(179, 135, 63, 0.12); }
+.dosha-info-icon { display: inline-block; width: 40px; height: 40px; margin: 0 0 14px; }
+.dosha-info-icon svg { width: 100%; height: 100%; }
+.dosha-info-icon--vata { color: var(--vata-label); }
+.dosha-info-icon--pitta { color: var(--pitta-label); }
+.dosha-info-icon--kapha { color: var(--kapha-label); }
+.dosha-info-title {
+  font-family: 'Marcellus', serif;
+  font-size: 19px;
+  color: var(--heading);
+  margin: 0 0 12px;
+}
+.dosha-info-text {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* Dosha popup backdrops (trial) — wind for Vata, fire for Pitta, earth and
+   water for Kapha; see
+   doshaInfoFx in chrome.js. isolation + z-index:-1 keeps them above the
+   card's background but beneath its text and close button. */
+.dosha-info-card { isolation: isolate; overflow: hidden; }
+.dosha-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+/* wind: a short dash travels along each curve, like a passing gust */
+.dosha-fx--vata path {
+  fill: none;
+  stroke: var(--vata-label);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.28;
+  stroke-dasharray: 26 130;
+  stroke-dashoffset: 26;
+}
+/* fire: soft blurred flames rising from the bottom edge, plus drifting embers */
+.dosha-fx--pitta {
+  background: linear-gradient(to top, rgba(226, 110, 50, 0.22), transparent 45%);
+}
+.flame {
+  position: absolute;
+  bottom: -30px;
+  left: var(--x);
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 196, 92, 0.85), rgba(232, 96, 36, 0.55) 45%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0;
+}
+.ember {
+  position: absolute;
+  bottom: 10px;
+  left: var(--x);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f39a4a;
+  box-shadow: 0 0 6px 2px rgba(243, 154, 74, 0.6);
+  opacity: 0;
+}
+/* earth & water: a slow wave flowing behind layered hills, ripples on its surface */
+.dosha-info-card--kapha { padding-bottom: 72px; } /* room for the landscape below the text */
+.dosha-fx--kapha {
+  background: linear-gradient(to top, rgba(120, 160, 140, 0.14), transparent 40%);
+}
+.kapha-water {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 34px;
+}
+.kapha-water path { fill: rgba(86, 150, 156, 0.16); }
+.kapha-water--back { bottom: 30px; }
+.kapha-water--front { bottom: 22px; transform: translateX(-25%); }
+.kapha-water--front path { fill: rgba(86, 150, 156, 0.2); }
+.ripple {
+  position: absolute;
+  bottom: 44px;
+  left: var(--x);
+  width: 70px;
+  height: 18px;
+  margin-left: -35px;
+  border: 1.5px solid rgba(86, 150, 156, 0.5);
+  border-radius: 50%;
+  opacity: 0;
+}
+.kapha-earth {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46px;
+}
+.kapha-earth__back { fill: rgba(200, 187, 146, 0.38); }
+.kapha-earth__front { fill: rgba(76, 122, 92, 0.22); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .kapha-water--back { animation: kapha-flow 14s linear infinite; }
+  .kapha-water--front { animation: kapha-flow 9s linear -4s infinite reverse; }
+  .ripple { animation: kapha-ripple 4.5s ease-out calc(var(--i) * -1.5s) infinite; }
+  .dosha-fx--vata path { animation: dosha-gust 3s ease-in-out calc(var(--i) * -1.1s) infinite; }
+  .flame { animation: dosha-flame 2.2s ease-in calc(var(--i) * -0.37s) infinite; }
+  .ember { animation: dosha-ember 3.6s ease-out calc(var(--i) * -0.45s) infinite; }
+}
+@keyframes kapha-flow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes kapha-ripple {
+  0% { transform: scale(0.15); opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+@keyframes dosha-gust {
+  to { stroke-dashoffset: -110; }
+}
+@keyframes dosha-flame {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  15% { opacity: 0.75; }
+  100% { transform: translateY(-150px) scale(0.25); opacity: 0; }
+}
+@keyframes dosha-ember {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 0.9; }
+  50% { transform: translate(12px, -120px); }
+  100% { transform: translate(-8px, -260px); opacity: 0; }
+}

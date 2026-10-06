@@ -1,0 +1,111 @@
+/* ==================== Score panel ==================== */
+.score-panel {
+  position: sticky;
+  top: 84px;
+  background: linear-gradient(175deg, var(--forest) 0%, var(--forest-deep) 100%);
+  border: 1px solid rgba(217, 181, 110, 0.35);
+  border-radius: 16px;
+  padding: 22px 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.score-panel__title {
+  font-family: 'Marcellus', serif;
+  color: var(--on-forest);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  margin: 0 0 18px;
+  text-align: center;
+}
+
+.figure { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
+
+.figure__body--large {
+  width: 100%;
+  max-width: 104px;
+  height: 229px;
+  margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 0 14px rgba(217, 181, 110, 0.35));
+}
+
+/* The silhouette itself is a real traced image, used as a mask so the
+   gradient/tint shows through only inside the body — male by default,
+   swapped to the female silhouette when that's the selected profile sex. */
+.figure__fill,
+.figure__sheen {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: url('/figure-body-mask-male.png');
+  mask-image: url('/figure-body-mask-male.png');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.figure--female .figure__fill,
+.figure--female .figure__sheen {
+  -webkit-mask-image: url('/figure-body-mask-female.png');
+  mask-image: url('/figure-body-mask-female.png');
+}
+
+.figure__fill { transition: background 0.4s ease; }
+
+.figure__sheen {
+  pointer-events: none;
+  background: radial-gradient(ellipse at 38% 20%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 55%);
+}
+
+.score-panel__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.legend-item { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.legend-item__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(250, 246, 234, 0.4);
+}
+.legend-item--vata .legend-item__swatch { background: var(--vata-selected); }
+.legend-item--pitta .legend-item__swatch { background: var(--pitta-selected); }
+.legend-item--kapha .legend-item__swatch { background: var(--kapha-selected); }
+.legend-item__label { font-size: 11.5px; letter-spacing: 0.03em; color: rgba(250, 246, 234, 0.75); }
+.legend-item__count {
+  font-family: 'Marcellus', serif;
+  color: var(--on-forest);
+  font-size: 15px;
+}
+
+.score-panel__progress {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(250, 246, 234, 0.72);
+  margin: 0 0 6px;
+}
+.score-panel__bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(250, 246, 234, 0.15);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.score-panel__bar-fill { height: 100%; background: var(--gold-light); }
+
+.score-panel__reset {
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.score-panel__reset:hover { background: rgba(217, 181, 110, 0.14); }

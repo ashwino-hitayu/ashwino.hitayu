@@ -1,0 +1,107 @@
+{
+  "/products/ojas-mukh-lepa-1.jpg": {
+    "width": 1000,
+    "height": 563,
+    "small": "/products/ojas-mukh-lepa-1-500.jpg"
+  },
+  "/products/ojas-mukh-lepa-2.jpg": {
+    "width": 768,
+    "height": 1252,
+    "small": "/products/ojas-mukh-lepa-2-500.jpg"
+  },
+  "/products/ojas-mukh-lepa-3.jpg": {
+    "width": 864,
+    "height": 1222,
+    "small": "/products/ojas-mukh-lepa-3-500.jpg"
+  },
+  "/products/ojas-mukh-lepa-4.jpg": {
+    "width": 1000,
+    "height": 1333,
+    "small": "/products/ojas-mukh-lepa-4-500.jpg"
+  },
+  "/products/shatdhaut-ghrit-1.jpeg": {
+    "width": 864,
+    "height": 1184,
+    "small": "/products/shatdhaut-ghrit-1-500.jpeg"
+  },
+  "/products/shatdhaut-ghrit-2.jpeg": {
+    "width": 1000,
+    "height": 1333,
+    "small": "/products/shatdhaut-ghrit-2-500.jpeg"
+  },
+  "/products/shatdhaut-ghrit-3.jpeg": {
+    "width": 1000,
+    "height": 1333,
+    "small": "/products/shatdhaut-ghrit-3-500.jpeg"
+  },
+  "/products/shatdhaut-ghrit-4.jpeg": {
+    "width": 1000,
+    "height": 1415,
+    "small": "/products/shatdhaut-ghrit-4-500.jpeg"
+  },
+  "/products/shatdhaut-ghrit-5.jpeg": {
+    "width": 1000,
+    "height": 1415,
+    "small": "/products/shatdhaut-ghrit-5-500.jpeg"
+  },
+  "/products/swarna-prashan-1.jpg": {
+    "width": 1000,
+    "height": 1000,
+    "small": "/products/swarna-prashan-1-500.jpg"
+  },
+  "/products/swarna-prashan-2.jpg": {
+    "width": 1000,
+    "height": 750,
+    "small": "/products/swarna-prashan-2-500.jpg"
+  },
+  "/products/swarna-prashan-3.jpg": {
+    "width": 1000,
+    "height": 750,
+    "small": "/products/swarna-prashan-3-500.jpg"
+  },
+  "/products/swarna-prashan-4.jpg": {
+    "width": 1000,
+    "height": 1000,
+    "small": "/products/swarna-prashan-4-500.jpg"
+  },
+  "/treatments/basti.jpg": {
+    "width": 667,
+    "height": 1000,
+    "small": "/treatments/basti-500.jpg"
+  },
+  "/treatments/hriday-basti.jpg": {
+    "width": 667,
+    "height": 1000,
+    "small": "/treatments/hriday-basti-500.jpg"
+  },
+  "/treatments/janu-basti.jpg": {
+    "width": 900,
+    "height": 600,
+    "small": "/treatments/janu-basti-500.jpg"
+  },
+  "/treatments/kati-basti.jpg": {
+    "width": 900,
+    "height": 675,
+    "small": "/treatments/kati-basti-500.jpg"
+  },
+  "/treatments/nasya.jpg": {
+    "width": 667,
+    "height": 1000,
+    "small": "/treatments/nasya-500.jpg"
+  },
+  "/treatments/raktamokshan.jpg": {
+    "width": 900,
+    "height": 675,
+    "small": "/treatments/raktamokshan-500.jpg"
+  },
+  "/treatments/snehan-swedan.jpg": {
+    "width": 900,
+    "height": 600,
+    "small": "/treatments/snehan-swedan-500.jpg"
+  },
+  "/treatments/viddhakarma.jpg": {
+    "width": 667,
+    "height": 1000,
+    "small": "/treatments/viddhakarma-500.jpg"
+  }
+}

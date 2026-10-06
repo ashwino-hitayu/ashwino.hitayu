@@ -1,0 +1,125 @@
+.btn {
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  padding: 13px 26px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid var(--gold);
+}
+.btn--primary { background: var(--forest); color: var(--on-forest); border-color: var(--forest); }
+.btn--primary:hover { background: var(--forest-mid); }
+.btn--ghost { background: transparent; color: var(--gold-deep); }
+.btn--ghost:hover { background: rgba(179, 135, 63, 0.1); }
+
+.landing-choices {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin: 34px 0;
+}
+.landing-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.landing-choice__btn {
+  min-width: 160px;
+  text-align: center;
+  text-decoration: none;
+}
+/* not built yet: muted, inert, with a "Coming soon" tip on hover / tap */
+.landing-choice__btn--soon {
+  position: relative;
+  color: var(--ink-faint);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+.landing-choice__btn--soon:hover { background: transparent; }
+.soon-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--forest);
+  color: var(--on-forest);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.soon-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: var(--forest);
+}
+.landing-choice__btn--soon:hover .soon-tip,
+.landing-choice__btn--soon:focus .soon-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.landing-choice__caption {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.whatsapp-cta {
+  text-align: center;
+  margin: 0 0 34px;
+}
+.whatsapp-cta__text {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  margin: 0 0 12px;
+}
+.brand-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 14px;
+}
+/* Pill buttons in each platform's own colours (WhatsApp green, Instagram
+   gradient, YouTube red) — white text/icon on all three. */
+.brand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.brand-btn:hover { filter: brightness(0.94); transform: translateY(-1px); }
+.brand-btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+.brand-btn--instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  box-shadow: 0 6px 16px rgba(220, 39, 67, 0.28);
+}
+.brand-btn--youtube {
+  background: #ff0000;
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.25);
+}
+.brand-btn__icon { width: 18px; height: 18px; display: inline-flex; }
+.brand-btn__icon svg { width: 100%; height: 100%; }
+@media (max-width: 480px) {
+  .brand-btn-row { flex-direction: column; align-items: center; }
+  .brand-btn { min-width: 240px; }
+}

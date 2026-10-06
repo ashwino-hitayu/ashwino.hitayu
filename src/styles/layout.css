@@ -1,0 +1,15 @@
+/* ==================== Layout ==================== */
+.assessment-layout {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  gap: 30px;
+  align-items: stretch;
+}
+.assessment-layout__side {
+  align-self: stretch;
+}
+@media (max-width: 900px) {
+  .assessment-layout { grid-template-columns: 1fr; gap: 20px; }
+  .assessment-layout__side { order: -1; }
+  .score-panel { position: static; }
+}

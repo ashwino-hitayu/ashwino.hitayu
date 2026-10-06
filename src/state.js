@@ -7,12 +7,13 @@ import { doshaKeys, sanitizeAnswers, tallyAnswers, computePercents, computeVerdi
 export { doshaKeys, computePercents };
 
 export function escapeHtml(str) {
-  return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 }
 
 const STORAGE_KEY = 'hitayu-dosha-answers';
 const PROFILE_KEY = 'hitayu-dosha-profile';
 const THEME_KEY = 'hitayu-dosha-theme';
+const LANG_KEY = 'hitayu-dosha-lang';
 
 export function loadTheme() {
   try {
@@ -46,6 +47,29 @@ export function applyTheme() {
 export function effectiveTheme() {
   if (state.theme) return state.theme;
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+// Trial Hindi translation (see i18n.js). English unless the visitor picked
+// Hindi; the choice sticks across visits.
+function loadLang() {
+  try {
+    return localStorage.getItem(LANG_KEY) === 'hi' ? 'hi' : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+export function saveLang(lang) {
+  try {
+    if (lang === 'hi') localStorage.setItem(LANG_KEY, lang);
+    else localStorage.removeItem(LANG_KEY);
+  } catch {
+    /* ignore storage errors */
+  }
+}
+
+export function applyLang() {
+  document.documentElement.lang = state.lang;
 }
 
 function loadAnswers() {
@@ -98,7 +122,8 @@ export const state = {
   productOpen: null,
   productImageIndex: 0,
   lightboxOpen: false,
-  theme: loadTheme()
+  theme: loadTheme(),
+  lang: loadLang()
 };
 
 export function computeTotals() {
@@ -106,7 +131,10 @@ export function computeTotals() {
 }
 
 export function computeSectionTotals(section) {
-  return tallyAnswers(state.answers, section.rows.map((row) => row.id));
+  return tallyAnswers(
+    state.answers,
+    section.rows.map((row) => row.id)
+  );
 }
 
 export function computeVerdict() {

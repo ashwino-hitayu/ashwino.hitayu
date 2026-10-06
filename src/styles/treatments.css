@@ -1,0 +1,237 @@
+/* ==================== Treatments ==================== */
+/* 1 / 2 / 3 per row (layout from .card-grid) */
+.treatment-grid {
+  --cols: 1;
+  --gap: 16px;
+  margin: 0 0 26px;
+}
+@media (min-width: 640px) {
+  .treatment-grid { --cols: 2; --gap: 18px; }
+}
+@media (min-width: 960px) {
+  .treatment-grid { --cols: 3; --gap: 22px; }
+}
+
+/* ---- Flip card ----
+   Both faces share one grid cell, so the card is as tall as its taller face
+   (no fixed height). The inner layer turns 180° in 3D; each face hides its
+   back. Transforms always list translateY + rotateY so hover-lift and flip
+   interpolate smoothly together. */
+.flip-card {
+  display: flex;
+  perspective: 1600px;
+  scroll-margin-top: 90px;
+}
+.flip-card__inner {
+  flex: 1;
+  display: grid;
+  transform-style: preserve-3d;
+  transform: translateY(0) rotateY(0deg);
+  transition: transform 0.8s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+.flip-card.is-flipped .flip-card__inner { transform: translateY(0) rotateY(180deg); }
+@media (hover: hover) {
+  .flip-card:hover .flip-card__inner { transform: translateY(-5px) rotateY(0deg); }
+  .flip-card.is-flipped:hover .flip-card__inner { transform: translateY(-5px) rotateY(180deg); }
+}
+.flip-card__face {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border-top: 3px solid var(--gold);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  box-shadow: var(--shadow-card);
+}
+.flip-card:hover .flip-card__face { box-shadow: var(--shadow-soft); }
+
+/* front: full-bleed photo, name on a dark gradient */
+.flip-card__front {
+  isolation: isolate;
+  justify-content: flex-end;
+  min-height: 380px;
+  padding: 24px 22px 22px;
+  background: var(--forest-deep);
+  color: var(--on-forest);
+}
+.flip-card__image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.flip-card:hover .flip-card__image { transform: scale(1.05); }
+.flip-card__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(10, 22, 14, 0.94) 0%, rgba(10, 22, 14, 0.7) 32%, rgba(10, 22, 14, 0.1) 62%, transparent 80%);
+}
+.flip-card__sanskrit {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--gold-light);
+  margin: 0 0 2px;
+}
+.flip-card__name {
+  font-family: 'Marcellus', serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.15;
+  color: #fbf3df;
+  margin: 0 0 6px;
+}
+.flip-card__tagline {
+  font-size: 13.5px;
+  font-style: italic;
+  color: rgba(251, 243, 223, 0.8);
+  margin: 0 0 16px;
+}
+.flip-card__hint {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 181, 110, 0.6);
+  background: rgba(10, 22, 14, 0.5);
+  color: var(--gold-pale);
+  font-family: 'Marcellus', serif;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+/* the whole photo side is the hit area for the flip button (no filter /
+   backdrop-filter / transform on the button, or this would shrink to it) */
+.flip-card__hint::after { content: ''; position: absolute; inset: 0; }
+.flip-card:hover .flip-card__hint { background: var(--gold-light); color: var(--forest-deep); }
+.flip-card__hint:focus-visible { outline: 2px solid var(--gold-pale); outline-offset: 3px; }
+.flip-card__hint-icon, .flip-card__back-btn svg { width: 15px; height: 15px; display: inline-flex; }
+.flip-card__hint-icon svg { width: 100%; height: 100%; }
+
+/* back: the details */
+.flip-card__back {
+  transform: rotateY(180deg);
+  padding: 22px 22px 20px;
+  background: var(--ivory-warm);
+  border: 1px solid var(--paper-line);
+  border-top: 3px solid var(--gold);
+}
+.flip-card__back-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  background: var(--ivory);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.flip-card__back-btn:hover { background: rgba(179, 135, 63, 0.12); color: var(--heading); }
+.flip-card__back-btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.flip-card__back-btn svg { transform: scaleX(-1); }
+
+.treatment-card__sanskrit {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--gold-deep);
+  margin: 0 0 2px;
+}
+.treatment-card__name {
+  font-family: 'Marcellus', serif;
+  font-weight: 400;
+  font-size: 21px;
+  color: var(--heading);
+  margin: 0 0 10px;
+}
+.treatment-card__description {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+.treatment-card__uses-label {
+  font-family: 'Marcellus', serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 0 0 8px;
+}
+.treatment-card__uses {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0 0 16px;
+}
+.treatment-card__uses li {
+  font-size: 12px;
+  color: var(--ink-soft);
+  background: rgba(179, 135, 63, 0.1);
+  border: 1px solid rgba(179, 135, 63, 0.22);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.treatment-card__note {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin: -6px 0 16px;
+}
+.treatment-card__enquire {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--forest-soft);
+  color: var(--heading);
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.treatment-card__enquire:hover { background: var(--forest); color: var(--on-forest); border-color: var(--forest); }
+.treatment-card__enquire:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+.treatment-card__enquire-icon { width: 16px; height: 16px; display: inline-flex; }
+.treatment-card__enquire-icon svg { width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .flip-card__inner, .flip-card__image { transition: none; }
+}
+.treatments-credits {
+  max-width: 760px;
+  margin: -6px auto 22px;
+  text-align: center;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  opacity: 0.85;
+}
+.treatments-credits a { color: inherit; }
+.treatments-disclaimer {
+  max-width: 640px;
+  margin: 0 auto 30px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}

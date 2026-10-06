@@ -6,12 +6,7 @@ export const products = [
   {
     id: 'swarna-prashan',
     name: 'Swarna Prashan',
-    images: [
-      '/products/swarna-prashan-2.jpg',
-      '/products/swarna-prashan-3.jpg',
-      '/products/swarna-prashan-1.jpg',
-      '/products/swarna-prashan-4.jpg'
-    ],
+    images: ['/products/swarna-prashan-2.jpg', '/products/swarna-prashan-3.jpg', '/products/swarna-prashan-1.jpg', '/products/swarna-prashan-4.jpg'],
     price: '',
     size: '',
     tagline: 'Traditional purity, now in amber glass',
@@ -39,12 +34,7 @@ export const products = [
   {
     id: 'ojas-mukh-lepa',
     name: 'Ojas Mukh Lepa',
-    images: [
-      '/products/ojas-mukh-lepa-1.jpg',
-      '/products/ojas-mukh-lepa-2.jpg',
-      '/products/ojas-mukh-lepa-3.jpg',
-      '/products/ojas-mukh-lepa-4.jpg'
-    ],
+    images: ['/products/ojas-mukh-lepa-1.jpg', '/products/ojas-mukh-lepa-2.jpg', '/products/ojas-mukh-lepa-3.jpg', '/products/ojas-mukh-lepa-4.jpg'],
     price: '',
     size: '',
     tagline: 'Sun-dried skin radiance — a traditional Ayurvedic face pack',

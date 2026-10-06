@@ -1,5 +1,8 @@
+import './fonts.css';
 import './style.css';
-import { state, saveAnswers, saveProfile, saveTheme, applyTheme, effectiveTheme } from './state.js';
+import { Idiomorph } from 'idiomorph';
+import { state, saveAnswers, saveProfile, saveTheme, applyTheme, effectiveTheme, saveLang, applyLang } from './state.js';
+import { tr } from './i18n.js';
 import { sections } from './doshaData.js';
 import { parsePath, pathFor, legacyHashPath } from './router.js';
 import { metaForPath } from './seo.js';
@@ -14,9 +17,14 @@ import { toggleTreatmentFlip } from './components/treatments.js';
 
 const app = document.getElementById('app');
 
+// Builds the whole page as an HTML string, then morphs the live DOM to match:
+// only nodes that actually changed are touched, so focus, scroll positions
+// inside popups, running animations and loaded images survive a re-render.
+// captureFocus/restoreFocus stay as a fallback for elements that do get
+// replaced (e.g. a control whose markup changed shape).
 function render() {
   const focus = captureFocus();
-  app.innerHTML = `
+  const html = `
       <div class="texture-overlay" aria-hidden="true"></div>
       <div class="page">
         ${renderNav()}
@@ -28,6 +36,7 @@ function render() {
       ${renderProductOverlay()}
       ${renderImageLightbox()}
     `;
+  Idiomorph.morph(app, html, { morphStyle: 'innerHTML', restoreFocus: true });
   if (!manageDialogFocus(focus)) restoreFocus(focus);
   updateDocumentMeta();
 }
@@ -105,7 +114,18 @@ function renderReportOnly() {
 function focusSelector(el) {
   if (!el || el === document.body || !app.contains(el)) return null;
   if (el.id) return `#${CSS.escape(el.id)}`;
-  const attrs = ['data-open-lightbox', 'data-row-id', 'data-dosha', 'data-toggle-section', 'data-nav', 'data-dosha-info', 'data-product-open', 'data-product-thumb', 'data-product-image-prev', 'data-product-image-next'];
+  const attrs = [
+    'data-open-lightbox',
+    'data-row-id',
+    'data-dosha',
+    'data-toggle-section',
+    'data-nav',
+    'data-dosha-info',
+    'data-product-open',
+    'data-product-thumb',
+    'data-product-image-prev',
+    'data-product-image-next'
+  ];
   const parts = attrs.filter((a) => el.hasAttribute(a)).map((a) => `[${a}="${CSS.escape(el.getAttribute(a))}"]`);
   return parts.length ? `${el.tagName.toLowerCase()}${parts.join('')}` : null;
 }
@@ -222,6 +242,11 @@ document.addEventListener('click', (e) => {
   } else if (t.id === 'nav-menu-backdrop') {
     state.navMenuOpen = false;
     render();
+  } else if (t.closest('#lang-toggle')) {
+    state.lang = state.lang === 'hi' ? 'en' : 'hi';
+    saveLang(state.lang);
+    applyLang();
+    render();
   } else if (t.closest('#theme-toggle')) {
     state.theme = effectiveTheme() === 'dark' ? 'light' : 'dark';
     saveTheme(state.theme);
@@ -279,7 +304,7 @@ document.addEventListener('click', (e) => {
   } else if ((el = t.closest('.chapter__header'))) {
     toggleSection(el);
   } else if (t.closest('#reset-btn')) {
-    if (confirm('Clear all your answers and begin the assessment anew?')) {
+    if (confirm(tr('Clear all your answers and begin the assessment anew?'))) {
       state.answers = {};
       saveAnswers();
       render();
@@ -405,4 +430,5 @@ const legacyPath = location.pathname === '/' && legacyHashPath(location.hash);
 if (legacyPath) history.replaceState(null, '', legacyPath);
 applyRoute();
 applyTheme();
+applyLang();
 render();

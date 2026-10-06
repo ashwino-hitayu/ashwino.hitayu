@@ -1,0 +1,24 @@
+/* ==================== Footer ==================== */
+.site-footer {
+  text-align: center;
+  margin-top: 56px;
+  padding-top: 26px;
+  border-top: 1px solid var(--paper-line);
+}
+.site-footer__name {
+  font-family: 'Marcellus', serif;
+  color: var(--heading);
+  font-size: 15px;
+  margin: 0 0 4px;
+}
+.site-footer__line {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  font-style: italic;
+  margin: 0;
+}
+.site-footer__copyright {
+  color: var(--ink-faint);
+  font-size: 11px;
+  margin: 14px 0 0;
+}

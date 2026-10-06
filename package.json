@@ -7,10 +7,34 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "visual:baseline": "node scripts/visual-check.mjs baseline",
+    "visual:compare": "node scripts/visual-check.mjs compare",
+    "images": "node scripts/optimize-images.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.js\" \"scripts/**/*.mjs\" vite.config.js eslint.config.js",
+    "format:check": "prettier --check \"src/**/*.js\" \"scripts/**/*.mjs\" vite.config.js eslint.config.js"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0",
+    "prettier": "^3.9.9",
+    "sharp": "^0.35.5",
     "vite": "^5.4.0",
     "vitest": "^3.2.7"
+  },
+  "dependencies": {
+    "@fontsource/cinzel": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/kalam": "^5.3.0",
+    "@fontsource/lora": "^5.3.0",
+    "@fontsource/marcellus": "^5.3.0",
+    "@fontsource/noto-serif-devanagari": "^5.3.0",
+    "idiomorph": "^0.8.0"
   }
 }
