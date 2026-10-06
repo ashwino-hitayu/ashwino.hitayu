@@ -1,0 +1,6 @@
+/* Hindi (trial) — only applies while <html lang="hi">. Letter-spacing pulls
+   Devanagari letters apart and breaks the headline (shirorekha) joining them,
+   so it's switched off across the site; the printed report stays English. */
+html[lang='hi'] body *:not(.report-page, .report-page *, .lang-toggle) {
+  letter-spacing: normal !important;
+}

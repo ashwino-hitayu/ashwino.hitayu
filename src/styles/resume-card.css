@@ -1,0 +1,76 @@
+/* ==================== Resume card (home) ==================== */
+.resume-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 22px 0 0;
+  padding: 18px 22px;
+  border: 1px solid var(--paper-line);
+  border-left: 4px solid var(--gold);
+  border-radius: 14px;
+  background: var(--ivory-warm);
+  box-shadow: var(--shadow-card);
+}
+.resume-card__eyebrow {
+  margin: 0 0 4px;
+  font-family: 'Marcellus', serif;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.resume-card__text { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+.resume-card__text strong { color: var(--heading); }
+.resume-card__btn { flex-shrink: 0; text-decoration: none; }
+@media (max-width: 560px) {
+  .resume-card { flex-direction: column; align-items: stretch; text-align: center; }
+}
+
+/* ==================== Mobile progress bar (assessment) ====================
+   Phones stack the score panel above the questions, so this pinned bar keeps
+   progress visible while scrolling. Hidden on wider screens, where the score
+   panel itself is sticky. */
+.mobile-progress { display: none; }
+@media (max-width: 900px) {
+  .content--has-mobile-progress { padding-bottom: 76px; }
+  .mobile-progress {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 999px;
+    background: var(--forest);
+    color: var(--on-forest);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(217, 181, 110, 0.35);
+  }
+  .mobile-progress__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .mobile-progress__count { font-family: 'Marcellus', serif; font-size: 13px; letter-spacing: 0.04em; }
+  .mobile-progress__track { display: block; height: 4px; border-radius: 2px; background: rgba(251, 243, 223, 0.2); overflow: hidden; }
+  .mobile-progress__fill { display: block; height: 100%; background: var(--gold-light); transition: width 0.3s ease; }
+  .mobile-progress__tally { display: flex; gap: 10px; font-size: 12.5px; }
+  .mobile-progress__dosha { display: inline-flex; align-items: center; gap: 4px; }
+  .mobile-progress__dot { width: 9px; height: 9px; border-radius: 50%; }
+  .mobile-progress__dosha--vata .mobile-progress__dot { background: var(--vata-selected); }
+  .mobile-progress__dosha--pitta .mobile-progress__dot { background: var(--pitta-selected); }
+  .mobile-progress__dosha--kapha .mobile-progress__dot { background: var(--kapha-selected); }
+  .mobile-progress__btn {
+    flex-shrink: 0;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 999px;
+    background: var(--gold-light);
+    color: var(--forest-deep);
+    font-family: 'Marcellus', serif;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .mobile-progress__btn:focus-visible { outline: 2px solid var(--gold-pale); outline-offset: 2px; }
+}
+@media print { .mobile-progress { display: none !important; } }

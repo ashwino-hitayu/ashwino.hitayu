@@ -57,8 +57,29 @@ description and preview image — see `src/seo.js`), plus `404.html`,
 npm test
 ```
 
-Unit tests for the scoring maths (`src/scoring.test.js`) and the URL / SEO
-table (`src/router.test.js`).
+Unit tests for the scoring maths (`src/scoring.test.js`), the URL / SEO
+table (`src/router.test.js`) and the content data and WhatsApp result message
+(`src/content.test.js`).
+
+### Lint and format
+
+```bash
+npm run lint           # ESLint: catches undefined names, unused code, etc.
+npm run format         # Prettier: rewrites JS to the house style (.prettierrc.json)
+npm run format:check   # same, but only reports
+```
+
+### Visual check (screenshot diff)
+
+```bash
+npm run visual:baseline   # before a change: capture reference screenshots
+npm run visual:compare    # after it: re-capture and pixel-diff
+```
+
+Shoots every page (plus the product popup and a completed assessment) at
+phone, tablet and desktop widths in light and dark — 42 screenshots — and
+lists anything that changed, with highlighted diff images in `.visual/diff/`.
+First run on a new machine: `npx playwright install chromium-headless-shell`.
 
 ## What's inside
 
@@ -69,14 +90,16 @@ table (`src/router.test.js`).
 - `src/state.js` — app state, localStorage persistence and theme
 - `src/scoring.js` — the Vata / Pitta / Kapha totals, percents and verdict
 - `src/router.js` / `src/seo.js` — URL table and per-page titles/descriptions
-- `src/pages.js` — the Home, Assessment, About and Products pages
+- `src/pages.js` — the Home, Assessment, About, Treatments and Products pages
 - `src/components/` — nav/masthead/footer (`chrome.js`), the questionnaire
   (`assessment.js`), the printable A4 report (`report.js`), products
-  (`products.js`)
+  (`products.js`), treatment flip cards (`treatments.js`)
 - `src/doshaData.js` — all 33 questions across 5 sections (Physical Body,
   Lifestyle & Daily Habits, Communication, Mind & Emotions, Common
   Imbalances) plus the shloka library
 - `src/productsData.js` — the product catalog
+- `src/treatmentsData.js` — the therapies on the Treatments page (photos in
+  `public/treatments/`; `SHOW_TREATMENTS` in `src/router.js` hides the page)
 - `src/style.css` — the vintage mud-wall / royal-green / brass visual theme
 
 ## Customizing
@@ -88,4 +111,7 @@ table (`src/router.test.js`).
   as answer keys, so if you rename an `id` after someone has already
   answered, their saved answer for that row is dropped
 - Products: add entries to `src/productsData.js` (images go in
-  `public/products/`)
+  `public/products/`), then run `npm run images` — it shrinks photos wider
+  than 1000px, makes a 500px copy for phones and records the sizes in
+  `src/imageSizes.json` (`npm test` fails if a photo was skipped). Same for
+  treatment photos in `public/treatments/`.

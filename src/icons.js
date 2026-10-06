@@ -1,6 +1,7 @@
 // Small SVG icon strings and the per-dosha popup copy — pure presentation
-// assets with no dependency on app state, kept separate so component
-// modules don't need to import icons from each other.
+// assets, kept separate so component modules don't need to import icons from
+// each other. The pre-filled WhatsApp messages follow the chosen language.
+import { tr } from './i18n.js';
 
 export const doshaIcons = {
   vata: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 20c4-6 10-9 16-6 4 2 5 6 2 8-3 2-7 0-6-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 28c6-4 14-5 20-1 5 3 7 8 3 11-4 3-9 0-8-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 36c5-2 11-2 16 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
@@ -14,9 +15,9 @@ export const moonIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.
 export const whatsappIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.7 8.3c.3-.6.6-.6.9-.6h.4c.2 0 .4 0 .6.4s.6 1.5.7 1.6c.1.1.1.3 0 .5s-.2.3-.3.4-.3.3-.1.6c.2.3.8 1.1 1.6 1.8 1 .9 1.8 1.1 2.1 1.3.3.1.5.1.6-.1.2-.2.6-.7.8-1 .2-.3.4-.2.6-.1l1.5.7c.2.1.4.2.4.3.1.2.1.9-.2 1.4-.4.6-1.4 1-2 1-.5 0-1.3 0-2.1-.5-1.5-.6-2.9-1.8-4-3.3-.6-.9-1-1.7-1.1-2.1-.1-.4-.3-1.2 0-1.8Z" fill="currentColor"/></svg>`;
 export const whatsappLink = 'https://wa.me/message/IG7NATE62RMJB1';
 
-export const consultMessage = "Hi, I'm interested in getting a consultation. Could you please help me book one?";
-export const productMessage = (name) => `Hi, I'm interested in ${name}. Could you please share more details?`;
-export const treatmentMessage = (name) => `Hi, I'd like to know more about ${name} therapy. Could you please share details and availability?`;
+export const consultMessage = () => tr("Hi, I'm interested in getting a consultation. Could you please help me book one?");
+export const productMessage = (name) => tr("Hi, I'm interested in {name}. Could you please share more details?", { name });
+export const treatmentMessage = (name) => tr("Hi, I'd like to know more about {name} therapy. Could you please share details and availability?", { name });
 
 // Pre-filled messages need the clinic's number (the short link above ignores
 // ?text=), but the number is deliberately never written into the page: links

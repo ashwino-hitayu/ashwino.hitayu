@@ -1,0 +1,85 @@
+/* Self-hosted web fonts (npm @fontsource packages, the same files Google
+   Fonts serves). Vite bundles them into /assets/ with hashed names, so they
+   load from this site and cache for a year. Each file covers its scripts
+   with unicode-range, so browsers download only the subsets a page uses.
+   Only the faces the site renders; browsers map other CSS weights onto
+   these (e.g. Lora 700 -> 600). */
+
+/* headings, buttons, labels */
+@import '@fontsource/marcellus/400.css';
+/* body text */
+@import '@fontsource/lora/400.css';
+@import '@fontsource/lora/600.css';
+@import '@fontsource/lora/400-italic.css';
+/* Sanskrit / Hindi */
+@import '@fontsource/noto-serif-devanagari/500.css';
+@import '@fontsource/noto-serif-devanagari/600.css';
+@import '@fontsource/noto-serif-devanagari/700.css';
+/* hero masthead: title (Cormorant) and clinic name (Cinzel) */
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cinzel/600.css';
+/* "Crafted by a Vaidya" on Products — Latin only */
+@import '@fontsource/kalam/latin-400.css';
+
+/* Hindi (trial). The fonts above have no Devanagari, so each one borrows a
+   Devanagari face for Devanagari characters only (unicode-range): Hindi text
+   then renders in Noto Serif Devanagari (Kalam's own Devanagari for the
+   handwritten note) wherever a rule asks for Marcellus, Lora and so on, and
+   English text is untouched. Only weights the Latin faces already have are
+   declared, so English font matching can't change. The files download only
+   when Hindi is on screen. size-adjust: Devanagari reads small next to Latin
+   at the same font-size, so these faces draw it 10% larger. */
+@font-face {
+  font-family: 'Marcellus';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/noto-serif-devanagari/files/noto-serif-devanagari-devanagari-500-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/noto-serif-devanagari/files/noto-serif-devanagari-devanagari-400-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/noto-serif-devanagari/files/noto-serif-devanagari-devanagari-600-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/noto-serif-devanagari/files/noto-serif-devanagari-devanagari-400-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/noto-serif-devanagari/files/noto-serif-devanagari-devanagari-600-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../node_modules/@fontsource/kalam/files/kalam-devanagari-400-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+A8E0-A8FF;
+  size-adjust: 110%;
+}

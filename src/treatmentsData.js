@@ -15,7 +15,8 @@ export const treatments = [
     name: 'Kati Basti',
     tagline: 'Warm oil therapy for the lower back',
     sanskrit: 'कटि बस्ति',
-    description: 'Warm medicated oil is held over the lower back inside a ring of herbal dough, letting it soak deep into the muscles and joints of the lumbar spine.',
+    description:
+      'Warm medicated oil is held over the lower back inside a ring of herbal dough, letting it soak deep into the muscles and joints of the lumbar spine.',
     uses: ['Lower back pain', 'Stiffness & muscle spasm', 'Sciatica-type pain', 'Lumbar spondylosis']
   },
   {
@@ -52,11 +53,16 @@ export const treatments = [
   {
     id: 'raktamokshan',
     image: '/treatments/raktamokshan.jpg',
-    credit: { author: 'Ravipeenya', source: 'Wikimedia Commons, CC BY-SA 3.0, resized', url: 'https://commons.wikimedia.org/wiki/File:Leech_Treatment_-_Varicose_Vein.jpg' },
+    credit: {
+      author: 'Ravipeenya',
+      source: 'Wikimedia Commons, CC BY-SA 3.0, resized',
+      url: 'https://commons.wikimedia.org/wiki/File:Leech_Treatment_-_Varicose_Vein.jpg'
+    },
     name: 'Raktamokshan',
     tagline: 'Classical blood purification',
     sanskrit: 'रक्तमोक्षण',
-    description: 'Classical blood-purification therapy: a small, controlled amount of blood is let, most often with medicinal leeches (Jalaukavacharan), under strict hygiene.',
+    description:
+      'Classical blood-purification therapy: a small, controlled amount of blood is let, most often with medicinal leeches (Jalaukavacharan), under strict hygiene.',
     uses: ['Chronic skin conditions', 'Localised inflammation', 'Varicose veins', 'Acne & boils']
   },
   {
@@ -76,7 +82,8 @@ export const treatments = [
     name: 'Basti',
     tagline: 'Panchakarma’s principal therapy for Vata',
     sanskrit: 'बस्ति',
-    description: 'Medicated decoctions and oils given as an enema — the principal Panchakarma therapy for Vata, called “half of all treatment” in the Charaka Samhita.',
+    description:
+      'Medicated decoctions and oils given as an enema — the principal Panchakarma therapy for Vata, called “half of all treatment” in the Charaka Samhita.',
     uses: ['Chronic constipation & bloating', 'Joint & back pain', 'Vata disorders', 'Rejuvenation']
   },
   {
@@ -86,7 +93,8 @@ export const treatments = [
     name: 'Snehan & Swedan',
     tagline: 'Herbal oil massage and steam',
     sanskrit: 'स्नेहन – स्वेदन',
-    description: 'A full-body massage with warm herbal oils (Snehan) followed by herbal steam (Swedan) to ease stiffness, open the channels and prepare the body for deeper therapies.',
+    description:
+      'A full-body massage with warm herbal oils (Snehan) followed by herbal steam (Swedan) to ease stiffness, open the channels and prepare the body for deeper therapies.',
     uses: ['Body aches & stiffness', 'Fatigue & stress', 'Better circulation', 'Preparation for Panchakarma']
   }
 ];

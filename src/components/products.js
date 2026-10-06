@@ -7,6 +7,8 @@
 import { state } from '../state.js';
 import { products } from '../productsData.js';
 import { whatsappIcon, whatsappLinkAttrs, productMessage, chevronLeftIcon, chevronRightIcon } from '../icons.js';
+import { responsiveAttrs, SIZES } from '../images.js';
+import { tr } from '../i18n.js';
 
 // Seconds each photo rests in view, then seconds the slide to the next takes.
 const SLIDE_HOLD = 1.8;
@@ -46,6 +48,10 @@ export function warmProductTile(tileButton) {
   if (warmTiles.has(id)) return;
   warmTiles.add(id);
   tileButton.querySelectorAll('img[data-src]').forEach((img) => {
+    if (img.dataset.srcset) {
+      img.srcset = img.dataset.srcset;
+      img.removeAttribute('data-srcset');
+    }
     img.src = img.dataset.src;
     img.removeAttribute('data-src');
   });
@@ -61,12 +67,13 @@ export function renderProductTile(product, index = 0) {
   const trackStyle = count > 1 ? ` style="--slide-name: product-tile-slide-${count}; --slide-duration: ${(SLIDE_HOLD + SLIDE_MOVE) * count}s"` : '';
   return `
     <div class="product-tile">
-      <button type="button" class="product-tile__open" data-product-open="${product.id}" aria-label="View ${product.name} details">
+      <button type="button" class="product-tile__open" data-product-open="${product.id}" aria-label="${tr('View {name} details', { name: product.name })}">
         <span class="product-tile__image-wrap">
           <span class="product-tile__track ${count > 1 ? 'product-tile__track--slides' : ''}"${trackStyle}>
             ${slides
               .map((src, i) => {
-                const source = i === 0 || warm ? `src="${src}"` : `data-src="${src}"`;
+                const eager = i === 0 || warm;
+                const source = (eager ? `src="${src}"` : `data-src="${src}"`) + responsiveAttrs(src, SIZES.productTile, !eager);
                 const lazy = i === 0 && index >= 4 ? ' loading="lazy"' : '';
                 return `<img class="product-tile__image" ${source} alt="${i === 0 ? product.name : ''}" ${i === 0 ? '' : 'aria-hidden="true"'} decoding="async"${lazy} />`;
               })
@@ -74,12 +81,12 @@ export function renderProductTile(product, index = 0) {
           </span>
         </span>
         <span class="product-tile__name">${product.name}</span>
-        <span class="product-tile__tagline" title="${product.tagline}">${product.tagline}</span>
+        <span class="product-tile__tagline" title="${tr(product.tagline)}">${tr(product.tagline)}</span>
         ${priceLine(product, 'product-tile__price')}
       </button>
       <a ${buyLink} target="_blank" rel="noopener" class="product-tile__buy">
         <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
-        Buy Now
+        ${tr('Buy Now')}
       </a>
     </div>
   `;
@@ -89,7 +96,7 @@ export function renderProductGrid() {
   const counts = [...new Set(products.map((p) => p.images.length).filter((n) => n > 1))];
   return `
     <style>${counts.map(slideKeyframes).join('\n')}</style>
-    <div class="product-grid">
+    <div class="card-grid product-grid">
       ${products.map((p, i) => renderProductTile(p, i)).join('')}
     </div>
   `;
@@ -107,8 +114,8 @@ export function renderProductOverlay() {
 
   const gallery = hasMultiple
     ? `
-      <button type="button" class="product-overlay__nav product-overlay__nav--prev" data-product-image-prev aria-label="Previous photo">${chevronLeftIcon}</button>
-      <button type="button" class="product-overlay__nav product-overlay__nav--next" data-product-image-next aria-label="Next photo">${chevronRightIcon}</button>
+      <button type="button" class="product-overlay__nav product-overlay__nav--prev" data-product-image-prev aria-label="${tr('Previous photo')}">${chevronLeftIcon}</button>
+      <button type="button" class="product-overlay__nav product-overlay__nav--next" data-product-image-next aria-label="${tr('Next photo')}">${chevronRightIcon}</button>
     `
     : '';
 
@@ -117,8 +124,11 @@ export function renderProductOverlay() {
       <div class="product-overlay__thumbs">
         ${product.images
           .map(
-            (src, i) => `<button type="button" class="product-overlay__thumb ${i === index ? 'product-overlay__thumb--active' : ''}" data-product-thumb="${i}" aria-label="Show photo ${i + 1}">
-              <img src="${src}" alt="" loading="lazy" decoding="async" />
+            (
+              src,
+              i
+            ) => `<button type="button" class="product-overlay__thumb ${i === index ? 'product-overlay__thumb--active' : ''}" data-product-thumb="${i}" aria-label="${tr('Show photo {n}', { n: i + 1 })}">
+              <img src="${src}"${responsiveAttrs(src, SIZES.productThumb)} alt="" loading="lazy" decoding="async" />
             </button>`
           )
           .join('')}
@@ -129,23 +139,23 @@ export function renderProductOverlay() {
   return `
     <div class="product-overlay" id="product-overlay">
       <div class="product-overlay__card" role="dialog" aria-modal="true" aria-labelledby="product-overlay-name">
-        <button type="button" class="product-overlay__close" id="product-overlay-close" aria-label="Close">×</button>
+        <button type="button" class="product-overlay__close" id="product-overlay-close" aria-label="${tr('Close')}">×</button>
         <div class="product-overlay__gallery">
-          <img class="product-overlay__image" src="${product.images[index]}" alt="${product.name}" data-open-lightbox title="Click to view full photo" role="button" tabindex="0" aria-label="View full photo of ${product.name}" />
+          <img class="product-overlay__image" src="${product.images[index]}"${responsiveAttrs(product.images[index], SIZES.productPopup)} alt="${product.name}" data-open-lightbox title="${tr('Click to view full photo')}" role="button" tabindex="0" aria-label="${tr('View full photo of {name}', { name: product.name })}" />
           ${gallery}
         </div>
         ${thumbs}
         <div class="product-overlay__body">
           <h3 class="product-overlay__name" id="product-overlay-name">${product.name}</h3>
-          <p class="product-overlay__tagline">${product.tagline}</p>
+          <p class="product-overlay__tagline">${tr(product.tagline)}</p>
           ${priceLine(product, 'product-overlay__price')}
-          <p class="product-overlay__description">${product.description}</p>
+          <p class="product-overlay__description">${tr(product.description)}</p>
           <ul class="product-overlay__benefits">
-            ${product.benefits.map((b) => `<li>${b}</li>`).join('')}
+            ${product.benefits.map((b) => `<li>${tr(b)}</li>`).join('')}
           </ul>
           <a ${buyLink} target="_blank" rel="noopener" class="brand-btn brand-btn--whatsapp">
             <span class="brand-btn__icon" aria-hidden="true">${whatsappIcon}</span>
-            Order on WhatsApp
+            ${tr('Order on WhatsApp')}
           </a>
         </div>
       </div>
@@ -163,8 +173,8 @@ export function renderImageLightbox() {
   const index = Math.min(state.productImageIndex, product.images.length - 1);
 
   return `
-    <div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="${product.name} photo">
-      <button type="button" class="image-lightbox__close" id="image-lightbox-close" aria-label="Close">×</button>
+    <div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="${tr('{name} photo', { name: product.name })}">
+      <button type="button" class="image-lightbox__close" id="image-lightbox-close" aria-label="${tr('Close')}">×</button>
       <img class="image-lightbox__image" src="${product.images[index]}" alt="${product.name}" />
     </div>
   `;

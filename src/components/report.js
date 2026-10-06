@@ -18,7 +18,7 @@ export function renderReportOverlay() {
         <button type="button" class="btn" id="close-report-btn">Close</button>
         <button type="button" class="btn btn--primary" id="print-report-btn">Print / Save as PDF</button>
       </div>
-      <article class="report-page">
+      <article class="report-page" lang="en">
         <div class="report-page__header">
           <div class="report-page__emblem" aria-hidden="true">${peepalEmblem()}</div>
           <div class="report-page__clinic">

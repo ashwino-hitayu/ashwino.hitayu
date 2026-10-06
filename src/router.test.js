@@ -22,7 +22,8 @@ describe('router', () => {
   });
 
   it('round-trips pathFor -> parsePath', () => {
-    for (const page of ['home', 'assessment', 'about', ...(SHOW_TREATMENTS ? ['treatments'] : []), 'products']) expect(parsePath(pathFor(page)).page).toBe(page);
+    for (const page of ['home', 'assessment', 'about', ...(SHOW_TREATMENTS ? ['treatments'] : []), 'products'])
+      expect(parsePath(pathFor(page)).page).toBe(page);
     expect(parsePath(pathFor('products', productId)).productId).toBe(productId);
   });
 

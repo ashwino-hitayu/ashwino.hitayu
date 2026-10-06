@@ -36,6 +36,17 @@ function fillPage(template, pathname) {
     .replace('__JSONLD__', jsonLd);
 }
 
+// Fonts used on every page (Latin text): preloaded so text doesn't wait for
+// the CSS to be parsed before its font starts downloading.
+const PRELOAD_FONTS = [/\/lora-latin-400-normal-[^/]+\.woff2$/, /\/marcellus-latin-400-normal-[^/]+\.woff2$/];
+
+function fontPreloads(bundle) {
+  return Object.keys(bundle)
+    .filter((file) => PRELOAD_FONTS.some((re) => re.test(`/${file}`)))
+    .map((file) => `<link rel="preload" href="/${file}" as="font" type="font/woff2" crossorigin />`)
+    .join('\n    ');
+}
+
 // Writes dist/<route>/index.html for every route (each with its own title,
 // description and preview image), plus 404.html, robots.txt and — when
 // SITE_URL is set — sitemap.xml. Works on any static host, no rewrites needed.
@@ -50,7 +61,7 @@ function seoPages() {
     },
     generateBundle(_, bundle) {
       const index = bundle['index.html'];
-      const template = String(index.source);
+      const template = String(index.source).replace('</head>', `  ${fontPreloads(bundle)}\n  </head>`);
       const url = siteUrl();
       if (!url) {
         this.warn('SITE_URL is not set — link previews will have no image and no sitemap is generated. e.g. SITE_URL=https://example.com npm run build');
@@ -62,8 +73,14 @@ function seoPages() {
       this.emitFile({ type: 'asset', fileName: '404.html', source: fillPage(template, '/__not-found__') });
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: `User-agent: *\nAllow: /\n${url ? `\nSitemap: ${url}/sitemap.xml\n` : ''}` });
       if (url) {
-        const urls = allPaths().map((p) => `  <url><loc>${url}${p}</loc></url>`).join('\n');
-        this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n` });
+        const urls = allPaths()
+          .map((p) => `  <url><loc>${url}${p}</loc></url>`)
+          .join('\n');
+        this.emitFile({
+          type: 'asset',
+          fileName: 'sitemap.xml',
+          source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+        });
       }
     }
   };
